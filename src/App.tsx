@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -41,7 +41,7 @@ function App(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <Text style={styles.highlight}>Hello world</Text>
+      <Text style={styles.highlight}>Helloa world</Text>
     </SafeAreaView>
   );
 }
