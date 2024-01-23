@@ -1,11 +1,16 @@
-import React, {useEffect} from 'react';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {
+  Button,
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
+  TextInput,
+  View,
   useColorScheme,
 } from 'react-native';
+import {adminDashboardScreen} from '../../constants/Screens';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 // import authService from './appwrite/auth';
 
 function LoginScreen(): JSX.Element {
@@ -14,6 +19,11 @@ function LoginScreen(): JSX.Element {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? 'grey' : 'white',
   };
+
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const [email, setEmail] = useState('');
+  const [password, setPasswrod] = useState('');
+
   useEffect(() => {
     // authService
     //   .createAccount({
@@ -28,13 +38,31 @@ function LoginScreen(): JSX.Element {
     //     console.log(err);
     //   });
   });
+
+  const onPressLogin = () => {
+    navigation.navigate(adminDashboardScreen);
+  };
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <Text style={styles.highlight}>This is a login screen </Text>
+      <View style={styles.sectionContainer}>
+        <TextInput
+          value={email}
+          onChangeText={value => setEmail(value)}
+          style={styles.input}
+        />
+        <TextInput
+          value={password}
+          onChangeText={value => setPasswrod(value)}
+          secureTextEntry
+          style={styles.input}
+        />
+        <Button title="Login" onPress={onPressLogin} />
+      </View>
     </SafeAreaView>
   );
 }
@@ -55,6 +83,15 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  input: {
+    height: 30,
+    alignItems: 'center',
+    paddingHorizontal: 5,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: 'grey',
+    marginVertical: 5,
   },
 });
 
