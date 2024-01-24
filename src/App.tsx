@@ -9,6 +9,7 @@ import {
 } from './constants/Screens';
 import HomeScreen from './screens/Home/HomeScreen';
 import AdminDashboardScreen from './screens/AdminDashboard/AdminDashboardScreen';
+import {ModalProvider} from './context/modal/ModalProvider';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,16 +27,18 @@ function App(): JSX.Element {
   };
 
   return (
-    <NavigationContainer linking={linking}>
-      <Stack.Navigator initialRouteName={homeScreen}>
-        <Stack.Screen name={homeScreen} component={HomeScreen} />
-        <Stack.Screen name={loginScreen} component={LoginScreen} />
-        <Stack.Screen
-          name={adminDashboardScreen}
-          component={AdminDashboardScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ModalProvider>
+      <NavigationContainer linking={linking}>
+        <Stack.Navigator initialRouteName={homeScreen}>
+          <Stack.Screen name={homeScreen} component={HomeScreen} />
+          <Stack.Screen name={loginScreen} component={LoginScreen} />
+          <Stack.Screen
+            name={adminDashboardScreen}
+            component={AdminDashboardScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ModalProvider>
   );
 }
 
