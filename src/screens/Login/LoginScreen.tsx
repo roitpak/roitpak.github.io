@@ -4,13 +4,15 @@ import {
   Button,
   SafeAreaView,
   StatusBar,
-  StyleSheet,
+  Text,
   TextInput,
+  TouchableOpacity,
   View,
   useColorScheme,
 } from 'react-native';
 import {adminDashboardScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {styles} from './styles';
 // import authService from './appwrite/auth';
 
 function LoginScreen(): JSX.Element {
@@ -23,8 +25,19 @@ function LoginScreen(): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [email, setEmail] = useState('');
   const [password, setPasswrod] = useState('');
+  const [validated, setValidated] = useState(false);
+  const [signupMode, setSignupMode] = useState(false);
 
   useEffect(() => {
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const passwordRegex = signupMode
+      ? /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
+      : /^.{8,}$/;
+    if (emailRegex.test(email) && passwordRegex.test(password)) {
+      setValidated(true);
+    } else {
+      setValidated(false);
+    }
     // authService
     //   .createAccount({
     //     email: 'roitpak@gmail.com',
@@ -37,7 +50,7 @@ function LoginScreen(): JSX.Element {
     //   .catch(err => {
     //     console.log(err);
     //   });
-  });
+  }, [signupMode, email, password]);
 
   const onPressLogin = () => {
     navigation.navigate(adminDashboardScreen);
@@ -49,6 +62,7 @@ function LoginScreen(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
+      <Text style={styles.header}>{signupMode ? 'Signup' : 'Login'}</Text>
       <View style={styles.sectionContainer}>
         <TextInput
           value={email}
@@ -61,38 +75,20 @@ function LoginScreen(): JSX.Element {
           secureTextEntry
           style={styles.input}
         />
-        <Button title="Login" onPress={onPressLogin} />
+        <View style={styles.signupTextContainer}>
+          <Text style={styles.signupText}>
+            {signupMode ? 'Already have an account?' : 'Dont have an account?'}
+          </Text>
+          <TouchableOpacity onPress={() => setSignupMode(!signupMode)}>
+            <Text style={[styles.signupText, styles.signupTextHighlight]}>
+              {signupMode ? ' Sign in' : ' Signup'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <Button disabled={!validated} title="Login" onPress={onPressLogin} />
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  input: {
-    height: 30,
-    alignItems: 'center',
-    paddingHorizontal: 5,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: 'grey',
-    marginVertical: 5,
-  },
-});
 
 export default LoginScreen;
