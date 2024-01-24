@@ -13,13 +13,13 @@ import {
 import {adminDashboardScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {styles} from './styles';
-// import authService from './appwrite/auth';
+import authService from '../../appwrite/auth';
 
 function LoginScreen(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? 'grey' : 'white',
+    backgroundColor: isDarkMode ? 'white' : 'white',
   };
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -52,10 +52,16 @@ function LoginScreen(): JSX.Element {
     //   });
   }, [signupMode, email, password]);
 
-  const onPressLogin = () => {
-    navigation.navigate(adminDashboardScreen);
+  const onPressLogin = async () => {
+    const response = await authService.login({
+      email: email,
+      password: password,
+    });
+    console.log(response);
+    if (response) {
+      navigation.navigate(adminDashboardScreen);
+    }
   };
-
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar

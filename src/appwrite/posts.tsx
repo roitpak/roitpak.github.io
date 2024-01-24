@@ -8,7 +8,9 @@ export class Service {
   bucket;
 
   constructor() {
-    this.client.setEndpoint(Config.ENDPOINT).setProject(Config.PROJECT_ID);
+    this.client
+      .setEndpoint(Config.REACT_APP_ENDPOINT)
+      .setProject(Config.REACT_APP_PROJECT_ID);
     this.databases = new Databases(this.client);
     this.bucket = new Storage(this.client);
   }
@@ -16,8 +18,8 @@ export class Service {
   async getPost(slug: string) {
     try {
       return await this.databases.getDocument(
-        Config.POSTS_DATABASE,
-        Config.POSTS_COLLECTION,
+        Config.REACT_APP_POSTS_DATABASE,
+        Config.REACT_APP_POSTS_COLLECTION,
         slug,
       );
     } catch (error) {
@@ -29,8 +31,8 @@ export class Service {
   async getPosts(queries = [Query.equal('status', 'active')]) {
     try {
       return await this.databases.listDocuments(
-        Config.POSTS_DATABASE,
-        Config.POSTS_COLLECTION,
+        Config.REACT_APP_POSTS_DATABASE,
+        Config.REACT_APP_POSTS_COLLECTION,
         queries,
       );
     } catch (error) {
@@ -57,8 +59,8 @@ export class Service {
   }: Post) {
     try {
       return await this.databases.createDocument(
-        Config.POSTS_DATABASE,
-        Config.POSTS_COLLECTION,
+        Config.REACT_APP_POSTS_DATABASE,
+        Config.REACT_APP_POSTS_COLLECTION,
         slug,
         {
           title,
@@ -88,8 +90,8 @@ export class Service {
   ) {
     try {
       return await this.databases.updateDocument(
-        Config.POSTS_DATABASE,
-        Config.POSTS_COLLECTION,
+        Config.REACT_APP_POSTS_DATABASE,
+        Config.REACT_APP_POSTS_COLLECTION,
         slug,
         {
           title,
@@ -107,8 +109,8 @@ export class Service {
   async deletePost(slug: string) {
     try {
       await this.databases.deleteDocument(
-        Config.POSTS_DATABASE,
-        Config.POSTS_DATABASE,
+        Config.REACT_APP_POSTS_DATABASE,
+        Config.REACT_APP_POSTS_DATABASE,
         slug,
       );
       return true;
@@ -123,7 +125,7 @@ export class Service {
   async uploadFile(file: File) {
     try {
       return await this.bucket.createFile(
-        Config.POSTS_BUCKET,
+        Config.REACT_APP_POSTS_BUCKET,
         ID.unique(),
         file,
       );
@@ -135,7 +137,10 @@ export class Service {
 
   async deleteFile(fileId: string) {
     try {
-      return await this.bucket.deleteFile(Config.POSTS_BUCKET, fileId);
+      return await this.bucket.deleteFile(
+        Config.REACT_APP_POSTS_BUCKET,
+        fileId,
+      );
     } catch (error) {
       console.log('Appwrite service :: deleteFile() :: ', error);
       return false;
@@ -143,7 +148,8 @@ export class Service {
   }
 
   getFilePreview(fileId: string) {
-    return this.bucket.getFilePreview(Config.POSTS_BUCKET, fileId).href;
+    return this.bucket.getFilePreview(Config.REACT_APP_POSTS_BUCKET, fileId)
+      .href;
   }
 }
 
