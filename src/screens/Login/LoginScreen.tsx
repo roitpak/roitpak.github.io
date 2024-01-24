@@ -1,3 +1,4 @@
+import {ParamListBase, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   Button,
@@ -12,7 +13,6 @@ import {
 import {adminDashboardScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {styles} from './styles';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
 // import authService from './appwrite/auth';
 
 function LoginScreen(): JSX.Element {
@@ -25,7 +25,7 @@ function LoginScreen(): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [email, setEmail] = useState('');
   const [password, setPasswrod] = useState('');
-  const [validate, setValidated] = useState(false);
+  const [validated, setValidated] = useState(false);
   const [signupMode, setSignupMode] = useState(false);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ function LoginScreen(): JSX.Element {
     //   .catch(err => {
     //     console.log(err);
     //   });
-  }, [email, password, signupMode]);
+  }, [signupMode, email, password]);
 
   const onPressLogin = () => {
     navigation.navigate(adminDashboardScreen);
@@ -85,7 +85,7 @@ function LoginScreen(): JSX.Element {
             </Text>
           </TouchableOpacity>
         </View>
-        <Button disabled={!validate} title="Login" onPress={onPressLogin} />
+        <Button disabled={!validated} title="Login" onPress={onPressLogin} />
       </View>
     </SafeAreaView>
   );
