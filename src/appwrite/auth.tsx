@@ -51,8 +51,17 @@ export class AuthService {
   async logout() {
     try {
       await this.account.deleteSessions();
+      console.log('Appwrite service :: logout() : Sessions deleted');
     } catch (error: unknown) {
       console.log('Appwrite service :: logout() :: ', error);
+      throw error;
+    }
+  }
+  async createVerification() {
+    try {
+      return await this.account.createVerification('rohitpakhrin.com.np');
+    } catch (error: unknown) {
+      console.log('Appwrite service :: createVerification() :: ', error);
       throw error;
     }
   }

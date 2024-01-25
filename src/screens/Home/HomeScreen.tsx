@@ -7,9 +7,10 @@ import {
   Text,
   useColorScheme,
 } from 'react-native';
-import {loginScreen} from '../../constants/Screens';
+import {dashboardScreen, loginScreen} from '../../constants/Screens';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useUser} from '../../context/user/useUser';
 // import authService from './appwrite/auth';
 
 function HomeScreen(): JSX.Element {
@@ -18,10 +19,17 @@ function HomeScreen(): JSX.Element {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? 'grey' : 'white',
   };
+
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   const goToLoginScreen = () => {
     navigation.navigate(loginScreen);
   };
+  const goToDashboardScreen = () => {
+    navigation.navigate(dashboardScreen);
+  };
+
+  const {user} = useUser();
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -30,7 +38,9 @@ function HomeScreen(): JSX.Element {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <Text style={styles.highlight}>HomeScreen</Text>
-      <Button title="Go to login" onPress={goToLoginScreen} />
+      {user && <Text style={styles.highlight}>Hi {user.name}</Text>}
+      {!user && <Button title="Go to login" onPress={goToLoginScreen} />}
+      <Button title="Go to Dashboard" onPress={goToDashboardScreen} />
     </SafeAreaView>
   );
 }

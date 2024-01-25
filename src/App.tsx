@@ -2,14 +2,11 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import LoginScreen from './screens/Login/LoginScreen';
-import {
-  adminDashboardScreen,
-  homeScreen,
-  loginScreen,
-} from './constants/Screens';
+import {dashboardScreen, homeScreen, loginScreen} from './constants/Screens';
 import HomeScreen from './screens/Home/HomeScreen';
-import AdminDashboardScreen from './screens/AdminDashboard/AdminDashboardScreen';
+import DashboardScreen from './screens/Dashboard/DashboardScreen';
 import {ModalProvider} from './context/modal/ModalProvider';
+import {UserPrvider} from './context/user/UserProvider';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,16 +25,15 @@ function App(): JSX.Element {
 
   return (
     <ModalProvider>
-      <NavigationContainer linking={linking}>
-        <Stack.Navigator initialRouteName={homeScreen}>
-          <Stack.Screen name={homeScreen} component={HomeScreen} />
-          <Stack.Screen name={loginScreen} component={LoginScreen} />
-          <Stack.Screen
-            name={adminDashboardScreen}
-            component={AdminDashboardScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <UserPrvider>
+        <NavigationContainer linking={linking}>
+          <Stack.Navigator initialRouteName={homeScreen}>
+            <Stack.Screen name={homeScreen} component={HomeScreen} />
+            <Stack.Screen name={loginScreen} component={LoginScreen} />
+            <Stack.Screen name={dashboardScreen} component={DashboardScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </UserPrvider>
     </ModalProvider>
   );
 }
