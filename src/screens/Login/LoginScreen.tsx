@@ -14,6 +14,7 @@ import {adminDashboardScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {styles} from './styles';
 import authService from '../../appwrite/auth';
+import {useModal} from '../../context/modal/useModal';
 
 function LoginScreen(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -27,6 +28,7 @@ function LoginScreen(): JSX.Element {
   const [password, setPasswrod] = useState('');
   const [validated, setValidated] = useState(false);
   const [signupMode, setSignupMode] = useState(false);
+  const {openModal} = useModal();
 
   useEffect(() => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -53,15 +55,22 @@ function LoginScreen(): JSX.Element {
   }, [signupMode, email, password]);
 
   const onPressLogin = async () => {
-    const response = await authService.login({
-      email: email,
-      password: password,
-    });
-    console.log(response);
-    if (response) {
+    try {
+      const response = await authService.login({
+        email: email,
+        password: password,
+      });
       navigation.navigate(adminDashboardScreen);
+      console.log('Is the response---->', response);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        openModal({title: err.message});
+      } else {
+        openModal({title: 'Unknown error occurred'});
+      }
     }
   };
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
