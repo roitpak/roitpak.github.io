@@ -24,8 +24,11 @@ function LoginScreen(): JSX.Element {
   };
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   const [email, setEmail] = useState('');
   const [password, setPasswrod] = useState('');
+  const [name, setName] = useState('');
+
   const [validated, setValidated] = useState(false);
   const [signupMode, setSignupMode] = useState(false);
   const {openModal} = useModal();
@@ -35,40 +38,61 @@ function LoginScreen(): JSX.Element {
     const passwordRegex = signupMode
       ? /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
       : /^.{8,}$/;
-    if (emailRegex.test(email) && passwordRegex.test(password)) {
+    const nameRegex = signupMode ? /.+/ : /^.*$/;
+    console.log(
+      emailRegex.test(email),
+      passwordRegex.test(password),
+      nameRegex.test(name),
+    );
+    if (
+      emailRegex.test(email) &&
+      passwordRegex.test(password) &&
+      nameRegex.test(name)
+    ) {
       setValidated(true);
     } else {
       setValidated(false);
     }
-    // authService
-    //   .createAccount({
-    //     email: 'roitpak@gmail.com',
-    //     password: 'pakhrin132sir#',
-    //     name: 'Rohit Pakhrin',
-    //   })
-    //   .then(userData => {
-    //     console.log(userData);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
-  }, [signupMode, email, password]);
+  }, [signupMode, email, password, name]);
 
   const onPressLogin = async () => {
-    try {
-      const response = await authService.login({
+    await authService
+      .login({
         email: email,
         password: password,
+      })
+      .then(userData => {
+        navigation.navigate(adminDashboardScreen);
+        console.log('Is the response---->', userData);
+      })
+      .catch(err => {
+        if (err instanceof Error) {
+          openModal({title: err.message});
+        } else {
+          openModal({title: 'Unknown error occurred'});
+        }
       });
-      navigation.navigate(adminDashboardScreen);
-      console.log('Is the response---->', response);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        openModal({title: err.message});
-      } else {
-        openModal({title: 'Unknown error occurred'});
-      }
-    }
+  };
+
+  const onPressSignup = async () => {
+    authService
+      .createAccount({
+        email: email,
+        password: password,
+        name: name,
+      })
+      .then(userData => {
+        console.log(userData);
+        navigation.navigate(adminDashboardScreen);
+      })
+      .catch(err => {
+        console.log(err);
+        if (err instanceof Error) {
+          openModal({title: err.message});
+        } else {
+          openModal({title: 'Unknown error occurred'});
+        }
+      });
   };
 
   return (
@@ -90,6 +114,13 @@ function LoginScreen(): JSX.Element {
           secureTextEntry
           style={styles.input}
         />
+        {signupMode && (
+          <TextInput
+            value={name}
+            onChangeText={value => setName(value)}
+            style={styles.input}
+          />
+        )}
         <View style={styles.signupTextContainer}>
           <Text style={styles.signupText}>
             {signupMode ? 'Already have an account?' : 'Dont have an account?'}
@@ -100,7 +131,11 @@ function LoginScreen(): JSX.Element {
             </Text>
           </TouchableOpacity>
         </View>
-        <Button disabled={!validated} title="Login" onPress={onPressLogin} />
+        <Button
+          disabled={!validated}
+          title={signupMode ? 'Sign up' : 'Login'}
+          onPress={signupMode ? onPressSignup : onPressLogin}
+        />
       </View>
     </SafeAreaView>
   );
