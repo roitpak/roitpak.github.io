@@ -10,11 +10,12 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
-import {adminDashboardScreen} from '../../constants/Screens';
+import {dashboardScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {styles} from './styles';
 import authService from '../../appwrite/auth';
 import {useModal} from '../../context/modal/useModal';
+import {useUser} from '../../context/user/useUser';
 
 function LoginScreen(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -32,6 +33,7 @@ function LoginScreen(): JSX.Element {
   const [validated, setValidated] = useState(false);
   const [signupMode, setSignupMode] = useState(false);
   const {openModal} = useModal();
+  const {setLogin} = useUser();
 
   useEffect(() => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -39,11 +41,6 @@ function LoginScreen(): JSX.Element {
       ? /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
       : /^.{8,}$/;
     const nameRegex = signupMode ? /.+/ : /^.*$/;
-    console.log(
-      emailRegex.test(email),
-      passwordRegex.test(password),
-      nameRegex.test(name),
-    );
     if (
       emailRegex.test(email) &&
       passwordRegex.test(password) &&
@@ -62,8 +59,9 @@ function LoginScreen(): JSX.Element {
         password: password,
       })
       .then(userData => {
-        navigation.navigate(adminDashboardScreen);
-        console.log('Is the response---->', userData);
+        navigation.navigate(dashboardScreen);
+        console.log('Appwrite Login:', userData);
+        setLogin();
       })
       .catch(err => {
         if (err instanceof Error) {
@@ -82,8 +80,9 @@ function LoginScreen(): JSX.Element {
         name: name,
       })
       .then(userData => {
-        console.log(userData);
-        navigation.navigate(adminDashboardScreen);
+        console.log('Appwrite sign up:', userData);
+        setLogin();
+        navigation.navigate(dashboardScreen);
       })
       .catch(err => {
         console.log(err);
