@@ -4,6 +4,7 @@ declare module 'react-native-config' {
     REACT_APP_ENDPOINT: string;
     REACT_APP_POSTS_DATABASE: string;
     REACT_APP_POSTS_COLLECTION: string;
+    REACT_APP_POSTS_DATA_COLLECTION: string;
     REACT_APP_POSTS_BUCKET: string;
   }
 

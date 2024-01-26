@@ -3,6 +3,7 @@ import {UserContext} from './UserContext';
 import authService from '../../appwrite/auth';
 import {useModal} from '../modal/useModal';
 import {Models} from 'appwrite';
+import {ADMIN_LABEL} from '../../constants/UserLabels';
 
 export const UserPrvider: FC<PropsWithChildren> = ({children}) => {
   const [userInfo, setUserInfo] = useState<Models.User<Object>>();
@@ -12,7 +13,6 @@ export const UserPrvider: FC<PropsWithChildren> = ({children}) => {
     authService
       .getCurrentUser()
       .then(user => {
-        console.log('setting user');
         setUserInfo(user);
       })
       .catch(err => {
@@ -37,6 +37,7 @@ export const UserPrvider: FC<PropsWithChildren> = ({children}) => {
     <UserContext.Provider
       value={{
         user: userInfo,
+        isAdmin: userInfo?.labels.includes(ADMIN_LABEL),
         setLogin,
         logout,
       }}>

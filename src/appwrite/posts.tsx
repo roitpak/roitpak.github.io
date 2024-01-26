@@ -1,16 +1,19 @@
 import {Client, Databases, Storage, Query, ID} from 'appwrite';
 import {Post} from './types/posts';
 import Config from 'react-native-config';
+import {Platform} from 'react-native';
 
-export class Service {
+const myConfig = Platform.OS === 'web' ? process.env : Config;
+
+export class PostService {
   client = new Client();
   databases;
   bucket;
 
   constructor() {
     this.client
-      .setEndpoint(Config.REACT_APP_ENDPOINT)
-      .setProject(Config.REACT_APP_PROJECT_ID);
+      .setEndpoint(myConfig.REACT_APP_ENDPOINT)
+      .setProject(myConfig.REACT_APP_PROJECT_ID);
     this.databases = new Databases(this.client);
     this.bucket = new Storage(this.client);
   }
@@ -18,8 +21,20 @@ export class Service {
   async getPost(slug: string) {
     try {
       return await this.databases.getDocument(
-        Config.REACT_APP_POSTS_DATABASE,
-        Config.REACT_APP_POSTS_COLLECTION,
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_POSTS_COLLECTION,
+        slug,
+      );
+    } catch (error) {
+      console.log('Appwrite service :: getPost() :: ', error);
+      return false;
+    }
+  }
+  async getPostData(slug: string) {
+    try {
+      return await this.databases.getDocument(
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_POSTS_DATA_COLLECTION,
         slug,
       );
     } catch (error) {
@@ -28,13 +43,22 @@ export class Service {
     }
   }
 
-  async getPosts(queries = [Query.equal('status', 'active')]) {
+  async getPosts(
+    queries = [
+      Query.equal('status', 'published'),
+      Query.limit(10),
+      Query.offset(0),
+    ],
+  ) {
     try {
-      return await this.databases.listDocuments(
-        Config.REACT_APP_POSTS_DATABASE,
-        Config.REACT_APP_POSTS_COLLECTION,
+      const response = await this.databases.listDocuments(
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_POSTS_COLLECTION,
         queries,
       );
+      // to suppress typescript error
+      const posts: Post[] = (response?.documents as unknown as Post[]) || [];
+      return posts;
     } catch (error) {
       console.log('Appwrite service :: getPosts() :: ', error);
       return false;
@@ -59,8 +83,8 @@ export class Service {
   }: Post) {
     try {
       return await this.databases.createDocument(
-        Config.REACT_APP_POSTS_DATABASE,
-        Config.REACT_APP_POSTS_COLLECTION,
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_POSTS_COLLECTION,
         slug,
         {
           title,
@@ -90,8 +114,8 @@ export class Service {
   ) {
     try {
       return await this.databases.updateDocument(
-        Config.REACT_APP_POSTS_DATABASE,
-        Config.REACT_APP_POSTS_COLLECTION,
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_POSTS_COLLECTION,
         slug,
         {
           title,
@@ -109,8 +133,8 @@ export class Service {
   async deletePost(slug: string) {
     try {
       await this.databases.deleteDocument(
-        Config.REACT_APP_POSTS_DATABASE,
-        Config.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_POSTS_DATABASE,
         slug,
       );
       return true;
@@ -125,7 +149,7 @@ export class Service {
   async uploadFile(file: File) {
     try {
       return await this.bucket.createFile(
-        Config.REACT_APP_POSTS_BUCKET,
+        myConfig.REACT_APP_POSTS_BUCKET,
         ID.unique(),
         file,
       );
@@ -138,7 +162,7 @@ export class Service {
   async deleteFile(fileId: string) {
     try {
       return await this.bucket.deleteFile(
-        Config.REACT_APP_POSTS_BUCKET,
+        myConfig.REACT_APP_POSTS_BUCKET,
         fileId,
       );
     } catch (error) {
@@ -148,10 +172,10 @@ export class Service {
   }
 
   getFilePreview(fileId: string) {
-    return this.bucket.getFilePreview(Config.REACT_APP_POSTS_BUCKET, fileId)
+    return this.bucket.getFilePreview(myConfig.REACT_APP_POSTS_BUCKET, fileId)
       .href;
   }
 }
 
-const service = new Service();
-export default service;
+const postService = new PostService();
+export default postService;
