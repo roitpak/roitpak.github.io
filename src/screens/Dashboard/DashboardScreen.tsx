@@ -11,12 +11,13 @@ import {
 } from 'react-native';
 import {useUser} from '../../context/user/useUser';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
-import {addPostScreen, loginScreen} from '../../constants/Screens';
+import {loginScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ADMIN_LABEL} from '../../constants/UserLabels';
 import {Post} from '../../appwrite/types/posts';
 import {useModal} from '../../context/modal/useModal';
 import postService from '../../appwrite/posts';
+import AddPostModal from '../../components/post/AddPostModal';
 
 function DashboardScreen(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -31,9 +32,11 @@ function DashboardScreen(): JSX.Element {
   const [posts, setPosts] = useState<Post[]>([]);
   const {openModal} = useModal();
 
+  const [showAddPost, setShowAddPost] = useState(false);
+
   const goToSign = () => navigation.navigate(loginScreen);
 
-  const addPost = () => navigation.navigate(addPostScreen);
+  const addPost = () => setShowAddPost(true);
 
   useEffect(() => {
     postService
@@ -59,6 +62,7 @@ function DashboardScreen(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
+      <AddPostModal showAddPost={showAddPost} />
       {user && (
         <Text style={styles.highlight}>
           Hi {isAdmin && ADMIN_LABEL} {user.name}
