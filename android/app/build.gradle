@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.awesomeproject1"
+    namespace "com.roitpak.blog"
     defaultConfig {
-        applicationId "com.awesomeproject1"
+        applicationId "com.roitpak.blog"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

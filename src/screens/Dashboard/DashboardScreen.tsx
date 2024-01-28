@@ -6,14 +6,14 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View,
+  TouchableOpacity,
   useColorScheme,
 } from 'react-native';
 import {useUser} from '../../context/user/useUser';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
-import {loginScreen} from '../../constants/Screens';
+import {addPostScreen, loginScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ADMIN_LABEL} from '../../constants/UserLabels';
+import {ADMIN_LABEL} from '../../constants/Constants';
 import {Post} from '../../appwrite/types/posts';
 import {useModal} from '../../context/modal/useModal';
 import postService from '../../appwrite/posts';
@@ -40,8 +40,9 @@ function DashboardScreen(): JSX.Element {
 
   useEffect(() => {
     postService
-      .getPosts()
+      .getPosts(isAdmin)
       .then(data => {
+        console.log('Fetched data-->', data);
         if (data) {
           setPosts(data);
         }
@@ -54,7 +55,11 @@ function DashboardScreen(): JSX.Element {
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAdmin]);
+
+  const onPressItem = (item: Post) => {
+    navigation.navigate(addPostScreen, item);
+  };
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -62,7 +67,10 @@ function DashboardScreen(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <AddPostModal showAddPost={showAddPost} />
+      <AddPostModal
+        showAddPost={showAddPost}
+        close={() => setShowAddPost(false)}
+      />
       {user && (
         <Text style={styles.highlight}>
           Hi {isAdmin && ADMIN_LABEL} {user.name}
@@ -72,12 +80,14 @@ function DashboardScreen(): JSX.Element {
       <FlatList
         data={posts}
         renderItem={({item, index}) => (
-          <View style={{marginVertical: 20, flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={() => onPressItem(item)}
+            style={{marginVertical: 20, flexDirection: 'row'}}>
             <Text>{index + 1}.</Text>
             <Text>{item?.title}</Text>
-          </View>
+          </TouchableOpacity>
         )}
-        keyExtractor={item => item?.$id}
+        keyExtractor={(item, index) => index.toString()}
       />
       <Button
         title={user ? 'Log Out' : 'Sign in'}

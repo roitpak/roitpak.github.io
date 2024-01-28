@@ -2,9 +2,9 @@ import {Client, Databases, Storage, Query, ID} from 'appwrite';
 import {Post} from './types/posts';
 import Config from 'react-native-config';
 import {Platform} from 'react-native';
+import {Asset} from 'react-native-image-picker';
 
 const myConfig = Platform.OS === 'web' ? process.env : Config;
-
 export class PostService {
   client = new Client();
   databases;
@@ -26,8 +26,7 @@ export class PostService {
         slug,
       );
     } catch (error) {
-      console.log('Appwrite service :: getPost() :: ', error);
-      return false;
+      throw error;
     }
   }
   async getPostData(slug: string) {
@@ -38,18 +37,14 @@ export class PostService {
         slug,
       );
     } catch (error) {
-      console.log('Appwrite service :: getPost() :: ', error);
-      return false;
+      throw error;
     }
   }
 
-  async getPosts(
-    queries = [
-      Query.equal('status', 'published'),
-      Query.limit(10),
-      Query.offset(0),
-    ],
-  ) {
+  async getPosts(isAdmin?: boolean) {
+    const queries = isAdmin
+      ? [Query.limit(10), Query.offset(0)]
+      : [Query.equal('status', 'published'), Query.limit(10), Query.offset(0)];
     try {
       const response = await this.databases.listDocuments(
         myConfig.REACT_APP_POSTS_DATABASE,
@@ -60,51 +55,31 @@ export class PostService {
       const posts: Post[] = (response?.documents as unknown as Post[]) || [];
       return posts;
     } catch (error) {
-      console.log('Appwrite service :: getPosts() :: ', error);
-      return false;
+      throw error;
     }
   }
 
-  async createPost({
-    title,
-    slug,
-    content,
-    featuredImage,
-    status,
-    userId,
-    category,
-    tags,
-    date,
-    shareUrl,
-    tldr,
-    githubUrl,
-    videoUrl,
-    uploadedBy,
-  }: Post) {
+  async createPost(data: Post) {
     try {
+      // if (featuredImage instanceof File) {
+      //   await this.uploadFile(featuredImage)
+      //     .then(response => {
+      //       if (typeof response === 'object' && '$id' in response) {
+      //         imageID = response?.$id;
+      //       }
+      //     })
+      //     .catch(err => {
+      //       throw err;
+      //     });
+      // }
       return await this.databases.createDocument(
         myConfig.REACT_APP_POSTS_DATABASE,
         myConfig.REACT_APP_POSTS_COLLECTION,
-        slug,
-        {
-          title,
-          content,
-          featuredImage,
-          status,
-          userId,
-          category,
-          tags,
-          date,
-          shareUrl,
-          tldr,
-          githubUrl,
-          videoUrl,
-          uploadedBy,
-        },
+        data?.slug,
+        data,
       );
     } catch (error) {
-      console.log('Appwrite service :: createPost() :: ', error);
-      return false;
+      throw error;
     }
   }
 
@@ -125,8 +100,7 @@ export class PostService {
         },
       );
     } catch (error) {
-      console.log('Appwrite service :: updateDocument() :: ', error);
-      return false;
+      throw error;
     }
   }
 
@@ -139,23 +113,66 @@ export class PostService {
       );
       return true;
     } catch (error) {
-      console.log('Appwrite service :: deleteDocument() :: ', error);
-      return false;
+      throw error;
     }
   }
 
   // storage service
 
-  async uploadFile(file: File) {
-    try {
-      return await this.bucket.createFile(
-        myConfig.REACT_APP_POSTS_BUCKET,
-        ID.unique(),
-        file,
-      );
-    } catch (error) {
-      console.log('Appwrite service :: uploadFile() :: ', error);
-      return false;
+  async uploadFile(file: File | Asset | null | undefined) {
+    if (!file) {
+      throw new Error('File not found');
+    }
+    if (file instanceof File) {
+      try {
+        return await this.bucket.createFile(
+          myConfig.REACT_APP_POSTS_BUCKET,
+          ID.unique(),
+          file,
+        );
+      } catch (error) {
+        throw error;
+      }
+      // } else if (file.uri && file.fileName && file.type) {
+      //   let filename = file.uri.split('/').pop();
+
+      //   // Infer the type of the image
+      //   let match = /\.(\w+)$/.exec(file.uri);
+      //   let type = match ? `image/${match[1]}` : 'image';
+
+      //   console.log('_--------------------------------------_', {
+      //     uri: file.uri,
+      //     name: filename,
+      //     type,
+      //   });
+      //   let formData = new FormData();
+      //   formData.append('fileId', 'unique()');
+      //   formData.append('file', {
+      //     uri: file.uri,
+      //     name: filename,
+      //     type,
+      //   });
+
+      //   console.log('formData', formData);
+      //   try {
+      //     console.log(' I am here and posting--->');
+      //     const response = await fetch(
+      //       `${myConfig.REACT_APP_ENDPOINT}/storage/buckets/${myConfig.REACT_APP_POSTS_BUCKET}/files/`,
+      //       {
+      //         method: 'POST',
+      //         headers: {
+      //           'content-type': 'multipart/form-data',
+      //           'X-Appwrite-Project': myConfig.REACT_APP_PROJECT_ID,
+      //           'x-sdk-version': 'appwrite:web:10.2.0',
+      //         },
+      //         body: formData,
+      //         credentials: 'include',
+      //       },
+      //     );
+      //     console.log('Response--->>', response);
+      //   } catch (e) {
+      //     console.log('Error--->', e);
+      //   }
     }
   }
 
@@ -166,8 +183,7 @@ export class PostService {
         fileId,
       );
     } catch (error) {
-      console.log('Appwrite service :: deleteFile() :: ', error);
-      return false;
+      throw false;
     }
   }
 

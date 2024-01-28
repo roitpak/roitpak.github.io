@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -7,12 +7,16 @@ import {
   useColorScheme,
 } from 'react-native';
 
-function AddPostScreen(): JSX.Element {
+function AddPostScreen({route}: any): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? 'grey' : 'white',
   };
+  const [postData, setPostData] = useState(route.params);
+
+  useEffect(() => {
+    setPostData(route.params);
+  }, [route]);
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -20,7 +24,7 @@ function AddPostScreen(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <Text style={styles.highlight}>Add post screen</Text>
+      <Text style={styles.highlight}>{postData.title}</Text>
     </SafeAreaView>
   );
 }

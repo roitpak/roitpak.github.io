@@ -1,7 +1,8 @@
 import React, {ChangeEvent} from 'react';
+import {Asset} from 'react-native-image-picker';
 
 interface PickImageButtonProps {
-  imagePicked: (uri: string | null | undefined | File) => void;
+  imagePicked: (uri: Asset | null | undefined | File) => void;
 }
 
 function PickImageButton({imagePicked}: PickImageButtonProps): JSX.Element {

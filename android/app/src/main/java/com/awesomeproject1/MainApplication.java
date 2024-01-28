@@ -1,4 +1,4 @@
-package com.awesomeproject1;
+package com.roitpak.blog;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

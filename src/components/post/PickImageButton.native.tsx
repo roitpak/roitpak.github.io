@@ -1,9 +1,9 @@
 import React from 'react';
 import {Button} from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
+import {Asset, launchImageLibrary} from 'react-native-image-picker';
 
 interface PickImageButtonProps {
-  imagePicked: (file: string | undefined) => void;
+  imagePicked: (file: Asset | File | null | undefined) => void;
 }
 
 function PickImageButton({imagePicked}: PickImageButtonProps): JSX.Element {
@@ -12,7 +12,7 @@ function PickImageButton({imagePicked}: PickImageButtonProps): JSX.Element {
       mediaType: 'photo',
       selectionLimit: 1,
     });
-    result && result?.assets && imagePicked(result?.assets[0]?.uri);
+    result && result?.assets && imagePicked(result?.assets[0]);
   };
   return <Button title={'Pick image'} onPress={pickImage} />;
 }

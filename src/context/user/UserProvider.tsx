@@ -1,22 +1,24 @@
 import React, {FC, PropsWithChildren, useEffect, useState} from 'react';
 import {UserContext} from './UserContext';
 import authService from '../../appwrite/auth';
-import {useModal} from '../modal/useModal';
 import {Models} from 'appwrite';
-import {ADMIN_LABEL} from '../../constants/UserLabels';
+import {ADMIN_LABEL} from '../../constants/Constants';
 
 export const UserPrvider: FC<PropsWithChildren> = ({children}) => {
   const [userInfo, setUserInfo] = useState<Models.User<Object>>();
-  const {openModal} = useModal();
-
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const getUser = () => {
     authService
       .getCurrentUser()
       .then(user => {
+        if (user?.labels.includes(ADMIN_LABEL)) {
+          setIsAdmin(true);
+        }
         setUserInfo(user);
       })
       .catch(err => {
-        openModal({title: err.message});
+        console.log(err);
+        // openModal({title: err.message});
       });
   };
   const setLogin = () => {
@@ -26,18 +28,18 @@ export const UserPrvider: FC<PropsWithChildren> = ({children}) => {
   const logout = () => {
     setUserInfo(undefined);
     authService.logout();
+    setIsAdmin(false);
   };
 
   useEffect(() => {
     getUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <UserContext.Provider
       value={{
         user: userInfo,
-        isAdmin: userInfo?.labels.includes(ADMIN_LABEL),
+        isAdmin,
         setLogin,
         logout,
       }}>

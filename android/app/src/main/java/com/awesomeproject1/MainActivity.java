@@ -1,4 +1,4 @@
-package com.awesomeproject1;
+package com.roitpak.blog;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
