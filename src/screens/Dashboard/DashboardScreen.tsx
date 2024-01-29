@@ -42,7 +42,6 @@ function DashboardScreen(): JSX.Element {
     postService
       .getPosts(isAdmin)
       .then(data => {
-        console.log('Fetched data-->', data);
         if (data) {
           setPosts(data);
         }

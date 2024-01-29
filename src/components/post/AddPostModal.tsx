@@ -38,14 +38,9 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
   const addPost = async () => {
     const data: Post = {
       title: postTitle.toString(),
-      slug: postTitle
-        .replace(/[^a-zA-Z ]/g, '')
-        .toLowerCase()
-        .replace(/ /g, '_')
-        .toString()
-        .slice(0, 30),
       category: category,
       uploadedBy: user?.$id.toString(),
+      contents: [],
     };
     await postService
       .createPost(data)
@@ -78,8 +73,8 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
     setTempCategory('');
   };
 
-  // const onImagePicked = (file: File | Asset | undefined | null) => {
-  //   postService
+  // const onImagePicked = async (file: File | Asset | undefined | null) => {
+  //   await postService
   //     .uploadFile(file)
   //     .then(response => {
   //       console.log('Upload file response--->', response);

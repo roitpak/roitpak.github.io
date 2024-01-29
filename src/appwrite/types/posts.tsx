@@ -1,10 +1,13 @@
 export interface Post {
   $id?: string;
   title: string;
-  slug: string;
-  featuredImage?: string;
   status?: string;
   category: string[];
   uploadedBy?: string;
-  content?: string[];
+  contents: string[];
+  shareUrl?: URL;
+  likes?: number;
+  githubUrl?: URL;
+  tldr?: string;
+  videoUrl?: URL;
 }
