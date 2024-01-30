@@ -1,3 +1,5 @@
+import {BottomTypes} from './Types';
+
 export const DARK_MODE = 'dark';
 export const LIGHT_MODE = 'light';
 
@@ -13,6 +15,12 @@ export const POST_STATUS = {
 
 export const CODE_POST_TYPE = 'code';
 export const TEXT_POST_TYPE = 'text';
+
+export const BUTTON_TYPES: Record<BottomTypes, BottomTypes> = {
+  filled: 'filled',
+  outlined: 'outlined',
+  text: 'text',
+};
 
 export const POST_CONTENT_KEYS = {
   title: 'title',
