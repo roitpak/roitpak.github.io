@@ -1,20 +1,23 @@
 import React from 'react';
 import {
-  Button,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  TouchableOpacity,
 } from 'react-native';
 import {dashboardScreen, loginScreen} from '../../constants/Screens';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useUser} from '../../context/user/useUser';
+import Button from '../../components/common/Button';
+import {BUTTON_TYPES} from '../../constants/Constants';
+import {useTheme} from '../../context/theme/useTheme';
 // import authService from './appwrite/auth';
 
 function HomeScreen(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  const {changeTheme, isDarkMode} = useTheme();
+  console.log(isDarkMode);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? 'grey' : 'white',
@@ -37,10 +40,17 @@ function HomeScreen(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
+      <TouchableOpacity onPress={changeTheme}>
+        <Text>Change Theme</Text>
+      </TouchableOpacity>
       <Text style={styles.highlight}>HomeScreen</Text>
       {user && <Text style={styles.highlight}>Hi {user.name}</Text>}
       {!user && <Button title="Go to login" onPress={goToLoginScreen} />}
-      <Button title="Go to Dashboard" onPress={goToDashboardScreen} />
+      <Button
+        type={BUTTON_TYPES.text}
+        title="Go to Dashboard"
+        onPress={goToDashboardScreen}
+      />
     </SafeAreaView>
   );
 }

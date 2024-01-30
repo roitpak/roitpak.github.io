@@ -1,7 +1,8 @@
-import {Theme, ThemeMode} from '../../constants/Types';
+import {Theme} from '../../constants/Types';
 
 export interface ThemeProviderValue {
   theme: Theme;
   isDark?: boolean;
-  setTheme?: (value: ThemeMode) => void;
+  changeTheme?: () => void;
+  isDarkMode: boolean;
 }

@@ -8,6 +8,8 @@ export interface Sizes {
   large: number;
   extra_large: number;
   extra_extra_large: number;
+  border_radius: number;
+  button_width: string | number;
 }
 
 export interface Colors {
@@ -15,17 +17,35 @@ export interface Colors {
   text_color: string;
   headers: string;
   button_text: string;
+  button_text_filled: string;
   button_background: string;
   button_border: string;
   button_disabled: string;
+  button_disabled_text: string;
   links: string;
   accent_color: string;
+  negative: string;
+  positive: string;
+  neutral: string;
+  gray: string;
+  white: string;
+  grayDarker: string;
+  grayDarker2: string;
+  grayLighter: string;
+  grayLighter2: string;
+  transparent: string;
+  blackOpacity01: string;
+  blackOpacity02: string;
+  blackOpacity06: string;
+  blackOpacity08: string;
 }
 export interface Theme {
   sizes: Sizes;
   colors: Colors;
 }
 export type ThemeMode = 'light' | 'dark';
+
+export type BottomTypes = 'filled' | 'outlined' | 'text';
 
 export interface User {
   $createdAt: string;
