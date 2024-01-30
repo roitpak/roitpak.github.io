@@ -7,7 +7,6 @@ interface PickImageButtonProps {
 
 function PickImageButton({imagePicked}: PickImageButtonProps): JSX.Element {
   const onImagePicked = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log('File--->', event.target.files);
     imagePicked(event?.target?.files?.[0]);
   };
 

@@ -1,3 +1,5 @@
+import {Asset} from 'react-native-image-picker';
+
 export interface User {
   $createdAt: string;
   $id: string;
@@ -13,4 +15,14 @@ export interface User {
   prefs: {};
   registration: string;
   status: boolean;
+}
+
+export interface PostContent {
+  title: string;
+  subtitle: string;
+  content_type: 'code' | 'text';
+  image_id?: string;
+  image?: File | Asset | null | undefined;
+  content: string;
+  postID: string;
 }

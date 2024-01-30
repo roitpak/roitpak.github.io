@@ -10,7 +10,7 @@ import {
 import HomeScreen from '../screens/Home/HomeScreen';
 import LoginScreen from '../screens/Login/LoginScreen';
 import DashboardScreen from '../screens/Dashboard/DashboardScreen';
-import AddPostScreen from '../screens/Post/AddPostScreen';
+import PostInfoScreen from '../screens/Post/PostContentScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +32,7 @@ function MainStackScreen(): JSX.Element {
         <Stack.Screen name={homeScreen} component={HomeScreen} />
         <Stack.Screen name={loginScreen} component={LoginScreen} />
         <Stack.Screen name={dashboardScreen} component={DashboardScreen} />
-        <Stack.Screen name={addPostScreen} component={AddPostScreen} />
+        <Stack.Screen name={addPostScreen} component={PostInfoScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

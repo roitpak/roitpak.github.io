@@ -3,6 +3,7 @@ import {Post} from './types/posts';
 import Config from 'react-native-config';
 import {Platform} from 'react-native';
 import {Asset} from 'react-native-image-picker';
+import {PostContent} from '../constants/Types';
 
 const myConfig = Platform.OS === 'web' ? process.env : Config;
 export class PostService {
@@ -29,12 +30,12 @@ export class PostService {
       throw error;
     }
   }
-  async getPostData(slug: string) {
+  async getPostData(id: string) {
     try {
       return await this.databases.getDocument(
         myConfig.REACT_APP_POSTS_DATABASE,
         myConfig.REACT_APP_POSTS_DATA_COLLECTION,
-        slug,
+        id,
       );
     } catch (error) {
       throw error;
@@ -61,21 +62,10 @@ export class PostService {
 
   async createPost(data: Post) {
     try {
-      // if (featuredImage instanceof File) {
-      //   await this.uploadFile(featuredImage)
-      //     .then(response => {
-      //       if (typeof response === 'object' && '$id' in response) {
-      //         imageID = response?.$id;
-      //       }
-      //     })
-      //     .catch(err => {
-      //       throw err;
-      //     });
-      // }
       return await this.databases.createDocument(
         myConfig.REACT_APP_POSTS_DATABASE,
         myConfig.REACT_APP_POSTS_COLLECTION,
-        data?.slug,
+        ID.unique(),
         data,
       );
     } catch (error) {
@@ -83,35 +73,91 @@ export class PostService {
     }
   }
 
-  async updatePost(
-    slug: string,
-    {title, content, featuredImage, status}: Post,
-  ) {
+  async createPostContent(data: PostContent, post: Post) {
+    let tempPost = {
+      $id: post.$id,
+      title: post.title,
+      contents: post.contents,
+      category: post.category,
+      shareUrl: post.shareUrl,
+      likes: post.likes,
+      githubUrl: post.githubUrl,
+      uploadedBy: post.uploadedBy,
+      status: post.status,
+      tldr: post.tldr,
+      videoUrl: post.videoUrl,
+    };
+    let postData = data;
+    // If there is image upload it
+    if (data?.image) {
+      await this.uploadFile(data.image)
+        .then((response: any) => {
+          console.log('Is the response here---->', response);
+          postData.image_id = response.$id;
+        })
+        .catch(err => {
+          throw err;
+        });
+    }
+    delete postData.image;
+    let id = '';
+    // create post data with that image id
+    await this.databases
+      .createDocument(
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_POSTS_DATA_COLLECTION,
+        ID.unique(),
+        postData,
+      )
+      .then(response => {
+        id = response.$id;
+      })
+      .catch(error => {
+        throw error;
+      });
+    tempPost?.contents?.push(id);
+    if (post?.$id) {
+      await this.updatePost(post.$id, tempPost)
+        .then(response => {
+          return response;
+        })
+        .catch(err => console.log(err));
+    }
+  }
+
+  async getPostContentData(id: string) {
+    try {
+      return await this.databases.getDocument(
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_POSTS_DATA_COLLECTION,
+        id,
+      );
+      // to suppress typescript error
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updatePost(slug: string, post: Post) {
     try {
       return await this.databases.updateDocument(
         myConfig.REACT_APP_POSTS_DATABASE,
         myConfig.REACT_APP_POSTS_COLLECTION,
         slug,
-        {
-          title,
-          content,
-          featuredImage,
-          status,
-        },
+        post,
       );
     } catch (error) {
       throw error;
     }
   }
 
-  async deletePost(slug: string) {
+  async deletePost(id: string) {
     try {
-      await this.databases.deleteDocument(
+      return await this.databases.deleteDocument(
         myConfig.REACT_APP_POSTS_DATABASE,
         myConfig.REACT_APP_POSTS_DATABASE,
-        slug,
+        id,
       );
-      return true;
     } catch (error) {
       throw error;
     }
@@ -133,46 +179,43 @@ export class PostService {
       } catch (error) {
         throw error;
       }
-      // } else if (file.uri && file.fileName && file.type) {
-      //   let filename = file.uri.split('/').pop();
+    } else if (file.uri && file.fileName && file.type) {
+      let filename = file.uri.split('/').pop();
 
-      //   // Infer the type of the image
-      //   let match = /\.(\w+)$/.exec(file.uri);
-      //   let type = match ? `image/${match[1]}` : 'image';
-
-      //   console.log('_--------------------------------------_', {
-      //     uri: file.uri,
-      //     name: filename,
-      //     type,
-      //   });
-      //   let formData = new FormData();
-      //   formData.append('fileId', 'unique()');
-      //   formData.append('file', {
-      //     uri: file.uri,
-      //     name: filename,
-      //     type,
-      //   });
-
-      //   console.log('formData', formData);
-      //   try {
-      //     console.log(' I am here and posting--->');
-      //     const response = await fetch(
-      //       `${myConfig.REACT_APP_ENDPOINT}/storage/buckets/${myConfig.REACT_APP_POSTS_BUCKET}/files/`,
-      //       {
-      //         method: 'POST',
-      //         headers: {
-      //           'content-type': 'multipart/form-data',
-      //           'X-Appwrite-Project': myConfig.REACT_APP_PROJECT_ID,
-      //           'x-sdk-version': 'appwrite:web:10.2.0',
-      //         },
-      //         body: formData,
-      //         credentials: 'include',
-      //       },
-      //     );
-      //     console.log('Response--->>', response);
-      //   } catch (e) {
-      //     console.log('Error--->', e);
-      //   }
+      // Infer the type of the image
+      let match = /\.(\w+)$/.exec(file.uri);
+      let type = match ? `image/${match[1]}` : 'image';
+      let formData = new FormData();
+      let id = new Date()
+        .toISOString()
+        .replace(/[^a-zA-Z0-9 ]/g, '')
+        .toLowerCase()
+        .toString()
+        .slice(0, 20);
+      formData.append('fileId', id);
+      formData.append('file', {
+        uri: file.uri,
+        name: filename,
+        type,
+      } as unknown as Blob);
+      try {
+        await fetch(
+          `${myConfig.REACT_APP_ENDPOINT}/storage/buckets/${myConfig.REACT_APP_POSTS_BUCKET}/files/`,
+          {
+            method: 'POST',
+            headers: {
+              'content-type': 'multipart/form-data',
+              'X-Appwrite-Project': myConfig.REACT_APP_PROJECT_ID,
+              'x-sdk-version': 'appwrite:web:10.2.0',
+            },
+            body: formData,
+            credentials: 'include',
+          },
+        );
+        return {$id: id};
+      } catch (e) {
+        throw e;
+      }
     }
   }
 
