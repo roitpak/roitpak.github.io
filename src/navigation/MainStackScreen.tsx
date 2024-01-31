@@ -11,6 +11,7 @@ import HomeScreen from '../screens/Home/HomeScreen';
 import LoginScreen from '../screens/Login/LoginScreen';
 import DashboardScreen from '../screens/Dashboard/DashboardScreen';
 import PostInfoScreen from '../screens/Post/PostContentScreen';
+import {headerHidden} from './navigationsoptions';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +29,9 @@ function MainStackScreen(): JSX.Element {
   };
   return (
     <NavigationContainer linking={linking}>
-      <Stack.Navigator initialRouteName={homeScreen}>
+      <Stack.Navigator
+        screenOptions={headerHidden}
+        initialRouteName={homeScreen}>
         <Stack.Screen name={homeScreen} component={HomeScreen} />
         <Stack.Screen name={loginScreen} component={LoginScreen} />
         <Stack.Screen name={dashboardScreen} component={DashboardScreen} />
