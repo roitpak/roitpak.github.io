@@ -24,6 +24,7 @@ export interface Colors {
   button_disabled_text: string;
   links: string;
   accent_color: string;
+  gradient_colors: string[];
   negative: string;
   positive: string;
   neutral: string;
