@@ -8,6 +8,7 @@ import Button from '../../components/common/Button';
 import {BUTTON_TYPES} from '../../constants/Constants';
 import {useTheme} from '../../context/theme/useTheme';
 import Wrapper from '../../components/common/Wrapper';
+import CustomText from '../../components/common/CustomText';
 // import authService from './appwrite/auth';
 
 function HomeScreen(): JSX.Element {
@@ -23,14 +24,14 @@ function HomeScreen(): JSX.Element {
   };
 
   const {user} = useUser();
-
+  console.log(styles);
   return (
     <Wrapper>
       <TouchableOpacity onPress={changeTheme}>
         <Text>Change Theme</Text>
       </TouchableOpacity>
-      <Text style={styles.highlight}>HomeScreen</Text>
-      {user && <Text style={styles.highlight}>Hi {user.name}</Text>}
+      <CustomText bold type="h1" title="Home Screen" />
+      {user && <CustomText type="h2" title={`Hi ${user.name}`} />}
       {!user && <Button title="Go to login" onPress={goToLoginScreen} />}
       <Button
         type={BUTTON_TYPES.filled}

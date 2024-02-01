@@ -10,7 +10,19 @@ export interface Sizes {
   extra_extra_large: number;
   border_radius: number;
   button_width: string | number;
+  text: TextSizes;
 }
+
+export interface TextSizes {
+  h1: number;
+  h2: number;
+  p1: number;
+  p2: number;
+  p3: number;
+  p4: number;
+}
+
+export type TextTypes = 'h1' | 'h2' | 'p1' | 'p2' | 'p3' | 'p4';
 
 export interface Colors {
   background_color: string;
