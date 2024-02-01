@@ -11,6 +11,14 @@ const sizes = {
   extra_extra_large: 30,
   border_radius: 10,
   button_width: Platform.OS === 'web' ? 200 : '100%',
+  text: {
+    h1: 24,
+    h2: 18,
+    p1: 17,
+    p2: 13,
+    p3: 11,
+    p4: 10,
+  },
 };
 
 const defaultColors = {
@@ -44,7 +52,7 @@ export const DarkTheme: Theme = {
     button_disabled_text: '#696969',
     links: '#6c757d',
     accent_color: '#28a745',
-    gradient_colors: ['#333333', '#2E2E2E', '#424242'],
+    gradient_colors: ['#424242', '#3b3a3a', '#2E2E2E'],
     ...defaultColors,
   },
 };
