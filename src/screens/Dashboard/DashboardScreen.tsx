@@ -1,14 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Button,
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {useUser} from '../../context/user/useUser';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {addPostScreen, loginScreen} from '../../constants/Screens';
@@ -18,14 +9,11 @@ import {Post} from '../../appwrite/types/posts';
 import {useModal} from '../../context/modal/useModal';
 import postService from '../../appwrite/posts';
 import AddPostModal from '../../components/post/AddPostModal';
+import Wrapper from '../../components/common/Wrapper';
+import CustomText from '../../components/common/CustomText';
+import Button from '../../components/common/Button';
 
 function DashboardScreen(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? 'grey' : 'white',
-  };
-
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const {user, isAdmin, logout} = useUser();
   const logUserOut = () => logout();
@@ -61,29 +49,27 @@ function DashboardScreen(): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
+    <Wrapper>
       <AddPostModal
         showAddPost={showAddPost}
         close={() => setShowAddPost(false)}
       />
+      <CustomText title={'DashboardScreen'} type={'h1'} />
       {user && (
-        <Text style={styles.highlight}>
-          Hi {isAdmin && ADMIN_LABEL} {user.name}
-        </Text>
+        <CustomText
+          title={`Hi ${isAdmin && ADMIN_LABEL} ${user.name}`}
+          type={'h1'}
+        />
       )}
       {isAdmin && <Button title={'Add Post'} onPress={addPost} />}
       <FlatList
+        style={styles.flatList}
         data={posts}
-        renderItem={({item, index}) => (
+        renderItem={({item}) => (
           <TouchableOpacity
             onPress={() => onPressItem(item)}
             style={{marginVertical: 20, flexDirection: 'row'}}>
-            <Text>{index + 1}.</Text>
-            <Text>{item?.title}</Text>
+            <CustomText title={item?.title} type={'h1'} />
           </TouchableOpacity>
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -92,27 +78,13 @@ function DashboardScreen(): JSX.Element {
         title={user ? 'Log Out' : 'Sign in'}
         onPress={user ? logUserOut : goToSign}
       />
-      <Text style={styles.highlight}>DashboardScreen</Text>
-    </SafeAreaView>
+    </Wrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  flatList: {
+    flex: 1,
   },
 });
 

@@ -11,6 +11,7 @@ const sizes = {
   extra_extra_large: 30,
   border_radius: 10,
   button_width: Platform.OS === 'web' ? 200 : '100%',
+  input_width: Platform.OS === 'web' ? 200 : '100%',
   text: {
     h1: 24,
     h2: 18,

@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {PostContent} from '../../constants/Types';
 import {
   CODE_POST_TYPE,
@@ -14,6 +7,9 @@ import {
   TEXT_POST_TYPE,
 } from '../../constants/Constants';
 import PickImageButton from './PickImageButton';
+import CustomTextInput from '../common/CustomTextInput';
+import CustomText from '../common/CustomText';
+import Button from '../common/Button';
 
 interface NewPostComponentProps {
   newPost: PostContent;
@@ -31,20 +27,18 @@ function NewPostComponent({
   };
   return (
     <View style={styles.container}>
-      <TextInput
+      <CustomTextInput
         placeholder="title"
-        style={styles.input}
         value={newPost.title}
         onChangeText={value => onChangeValue(value, POST_CONTENT_KEYS.title)}
       />
-      <TextInput
+      <CustomTextInput
         placeholder="subtitle"
-        style={styles.input}
         value={newPost.subtitle}
         onChangeText={value => onChangeValue(value, POST_CONTENT_KEYS.subtitle)}
       />
       <View style={styles.selectOne}>
-        <Text>What is the type of this post?</Text>
+        <CustomText title={'What is the type of this post?'} type={'p1'} />
         <View style={styles.row}>
           <TouchableOpacity
             style={[
@@ -53,8 +47,10 @@ function NewPostComponent({
                 backgroundColor: 'blue',
               },
             ]}
-            onPress={() => onChangeValue(TEXT_POST_TYPE, 'type')}>
-            <Text>Text</Text>
+            onPress={() =>
+              onChangeValue(TEXT_POST_TYPE, POST_CONTENT_KEYS.content_type)
+            }>
+            <CustomText title={'Text'} type={'h2'} />
           </TouchableOpacity>
           <TouchableOpacity
             style={[
@@ -64,16 +60,16 @@ function NewPostComponent({
               },
             ]}
             onPress={() =>
-              onChangeValue(CODE_POST_TYPE, POST_CONTENT_KEYS.type)
+              onChangeValue(CODE_POST_TYPE, POST_CONTENT_KEYS.content_type)
             }>
-            <Text>Code</Text>
+            <CustomText title={'Code'} type={'h2'} />
           </TouchableOpacity>
         </View>
       </View>
       <PickImageButton
         imagePicked={image => onChangeValue(image, POST_CONTENT_KEYS.image)}
       />
-      <TextInput
+      <CustomTextInput
         multiline
         placeholder="Content"
         style={styles.contentInput}
@@ -117,9 +113,6 @@ const styles = StyleSheet.create({
   },
   contentInput: {
     height: 300,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: 'grey',
     marginVertical: 10,
   },
 });

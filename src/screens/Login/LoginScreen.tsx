@@ -1,29 +1,19 @@
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {
-  Button,
-  SafeAreaView,
-  StatusBar,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  useColorScheme,
-} from 'react-native';
+import {View} from 'react-native';
 import {dashboardScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {styles} from './styles';
 import authService from '../../appwrite/auth';
 import {useModal} from '../../context/modal/useModal';
 import {useUser} from '../../context/user/useUser';
+import CustomText from '../../components/common/CustomText';
+import Button from '../../components/common/Button';
+import {BUTTON_TYPES} from '../../constants/Constants';
+import Wrapper from '../../components/common/Wrapper';
+import CustomTextInput from '../../components/common/CustomTextInput';
 
 function LoginScreen(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? 'white' : 'white',
-  };
-
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const [email, setEmail] = useState('');
@@ -95,48 +85,52 @@ function LoginScreen(): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <Text style={styles.header}>{signupMode ? 'Signup' : 'Login'}</Text>
+    <Wrapper>
+      <CustomText type="h1" title={signupMode ? 'Signup' : 'Login'} />
       <View style={styles.sectionContainer}>
-        <TextInput
+        <CustomTextInput
+          markAsRequired
+          placeholder="Email"
           value={email}
           onChangeText={value => setEmail(value)}
-          style={styles.input}
         />
-        <TextInput
+        <CustomTextInput
+          markAsRequired
+          placeholder="Password"
           value={password}
           onChangeText={value => setPasswrod(value)}
           secureTextEntry
-          style={styles.input}
         />
         {signupMode && (
-          <TextInput
+          <CustomTextInput
+            markAsRequired
+            placeholder="Name"
             value={name}
             onChangeText={value => setName(value)}
-            style={styles.input}
           />
         )}
         <View style={styles.signupTextContainer}>
-          <Text style={styles.signupText}>
-            {signupMode ? 'Already have an account?' : 'Dont have an account?'}
-          </Text>
-          <TouchableOpacity onPress={() => setSignupMode(!signupMode)}>
-            <Text style={[styles.signupText, styles.signupTextHighlight]}>
-              {signupMode ? ' Sign in' : ' Signup'}
-            </Text>
-          </TouchableOpacity>
+          <CustomText
+            type="p2"
+            title={
+              signupMode ? 'Already have an account?' : 'Dont have an account?'
+            }
+          />
+          <CustomText
+            onPress={() => setSignupMode(!signupMode)}
+            type="p2"
+            bold
+            title={signupMode ? ' Sign in' : ' Signup'}
+          />
         </View>
         <Button
+          type={BUTTON_TYPES.filled}
           disabled={!validated}
           title={signupMode ? 'Sign up' : 'Login'}
           onPress={signupMode ? onPressSignup : onPressLogin}
         />
       </View>
-    </SafeAreaView>
+    </Wrapper>
   );
 }
 

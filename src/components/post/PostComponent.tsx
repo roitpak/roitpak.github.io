@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import postService from '../../appwrite/posts';
+import CustomText from '../common/CustomText';
 
 interface NewPostComponentProps {
   id: string;
@@ -23,7 +24,6 @@ function PostComponent({id}: NewPostComponentProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    console.log(image);
     if (postData?.image_id) {
       setImageURl(postService.getFilePreview(postData?.image_id));
     }
@@ -32,9 +32,8 @@ function PostComponent({id}: NewPostComponentProps): JSX.Element {
 
   return (
     <View style={styles.container}>
-      <Text>{postData?.title}</Text>
-      <Text>{postData?.subtitle}</Text>
-      {console.log(image)}
+      <CustomText title={postData?.title} type={'h1'} />
+      <CustomText title={postData?.subtitle} type={'h2'} />
       {image && (
         <Image
           style={styles.image}
@@ -43,7 +42,7 @@ function PostComponent({id}: NewPostComponentProps): JSX.Element {
           }}
         />
       )}
-      <Text>{postData?.content}</Text>
+      <CustomText title={postData?.content} type={'p1'} />
     </View>
   );
 }

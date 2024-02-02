@@ -29,8 +29,6 @@ export const styles = StyleSheet.create({
   signupTextContainer: {
     flexDirection: 'row',
     marginVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   header: {
     fontSize: 20,
