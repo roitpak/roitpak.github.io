@@ -25,7 +25,7 @@ export const BUTTON_TYPES: Record<BottomTypes, BottomTypes> = {
 export const POST_CONTENT_KEYS = {
   title: 'title',
   subtitle: 'subtitle',
-  type: 'type',
+  content_type: 'content_type',
   imageID: 'imageID',
   image: 'image',
   content: 'content',

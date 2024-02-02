@@ -60,6 +60,10 @@ const styles = (theme: Theme) =>
       fontSize: theme.sizes.text.p4,
       color: theme.colors.text_color,
     },
+    error: {
+      fontSize: theme.sizes.text.p1,
+      color: theme.colors.negative,
+    },
     bold: {
       fontWeight: 'bold',
     },

@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
 import {
-  Button,
   FlatList,
   Modal,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -13,12 +11,16 @@ import {
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {addPostScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-// import PickImageButton from './PickImageButton';
 import {useUser} from '../../context/user/useUser';
 import postService from '../../appwrite/posts';
 import {useModal} from '../../context/modal/useModal';
 import {Post} from '../../appwrite/types/posts';
-// import {Asset} from 'react-native-image-picker';
+import CustomTextInput from '../common/CustomTextInput';
+import CustomText from '../common/CustomText';
+import Button from '../common/Button';
+import {Theme} from '../../constants/Types';
+import {useTheme} from '../../context/theme/useTheme';
+// import Wrapper from '../common/Wrapper';
 
 interface AddPostModalProps {
   showAddPost: boolean;
@@ -34,7 +36,7 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
 
   const {user} = useUser();
   const {openModal} = useModal();
-
+  const {theme} = useTheme();
   const addPost = async () => {
     const data: Post = {
       title: postTitle.toString(),
@@ -73,45 +75,27 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
     setTempCategory('');
   };
 
-  // const onImagePicked = async (file: File | Asset | undefined | null) => {
-  //   await postService
-  //     .uploadFile(file)
-  //     .then(response => {
-  //       console.log('Upload file response--->', response);
-  //     })
-  //     .catch(error => {
-  //       console.log('Upload file error response--->', error);
-  //     });
-  // };
-
   return (
     <Modal transparent animationType="fade" visible={showAddPost}>
-      <TouchableOpacity
-        onPress={close}
-        style={{
-          flex: 1,
-          backgroundColor: 'rgba(52, 52, 52, 0.8)',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
+      <TouchableOpacity onPress={close} style={styles(theme).touchable}>
         <TouchableWithoutFeedback>
-          <View style={{width: 300, backgroundColor: 'white'}}>
-            <TextInput
+          <View style={styles(theme).content}>
+            <CustomText title={'New Post'} type={'h1'} />
+            <CustomTextInput
               placeholder={'Title'}
-              style={styles.input}
               value={postTitle}
               onChangeText={value => setPostTitle(value)}
             />
             <View style={{flexDirection: 'column'}}>
-              <Text>Category</Text>
+              <CustomText title={'Category'} type={'p2'} />
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <TextInput
-                  style={styles.input}
+                <CustomTextInput
                   value={tempCategory}
                   onChangeText={value => setTempCategory(value)}
+                  placeholder="eg: NodeJS"
                 />
                 <TouchableOpacity onPress={addCategory}>
-                  <Text>Add</Text>
+                  <CustomText title={'Add'} type={'p2'} />
                 </TouchableOpacity>
               </View>
               <FlatList
@@ -124,7 +108,7 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
                       marginHorizontal: 5,
                       marginVertical: 10,
                     }}>
-                    <Text>{item}</Text>
+                    <CustomText title={item} type={'p2'} />
                     <TouchableOpacity
                       onPress={() => onPressCategoryItem(index)}>
                       <Text>*</Text>
@@ -134,9 +118,6 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
                 keyExtractor={item => item}
               />
             </View>
-
-            {/* <PickImageButton imagePicked={onImagePicked} /> */}
-            {/* <Button title={'Pick image'} onPress={pickImage} /> */}
             <Button title={'Add post'} onPress={addPost} />
           </View>
         </TouchableWithoutFeedback>
@@ -144,15 +125,17 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
     </Modal>
   );
 }
-const styles = StyleSheet.create({
-  input: {
-    padding: 5,
-    borderColor: 'grey',
-    borderWidth: 1,
-    backgroundColor: 'white',
-    margin: 10,
-    width: 200,
-  },
-});
+const styles = (theme: Theme) =>
+  StyleSheet.create({
+    touchable: {
+      flex: 1,
+      backgroundColor: 'rgba(52, 52, 52, 0.8)',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    content: {
+      backgroundColor: theme.colors.background_color,
+    },
+  });
 
 export default AddPostModal;
