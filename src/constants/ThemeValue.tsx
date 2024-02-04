@@ -27,7 +27,7 @@ const defaultColors = {
   positive: '#137c26',
   neutral: '#FF8700',
   gray: '#555',
-  white: '#FFF',
+  white: '#FFFFFF',
   grayDarker: '#1a1a1a',
   grayDarker2: '#949494',
   grayLighter: '#D0CFD3',
