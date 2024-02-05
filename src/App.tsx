@@ -6,13 +6,13 @@ import {ThemeProvider} from './context/theme/ThemeProvider';
 
 function App(): JSX.Element {
   return (
-    <ModalProvider>
-      <UserPrvider>
-        <ThemeProvider>
+    <ThemeProvider>
+      <ModalProvider>
+        <UserPrvider>
           <MainStackScreen />
-        </ThemeProvider>
-      </UserPrvider>
-    </ModalProvider>
+        </UserPrvider>
+      </ModalProvider>
+    </ThemeProvider>
   );
 }
 

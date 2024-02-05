@@ -27,7 +27,7 @@ const defaultColors = {
   positive: '#137c26',
   neutral: '#FF8700',
   gray: '#555',
-  white: '#FFF',
+  white: '#FFFFFF',
   grayDarker: '#1a1a1a',
   grayDarker2: '#949494',
   grayLighter: '#D0CFD3',
@@ -37,6 +37,7 @@ const defaultColors = {
   blackOpacity02: 'rgba(0,0,0,.2)',
   blackOpacity06: 'rgba(0,0,0,.6)',
   blackOpacity08: 'rgba(0,0,0,.8)',
+  modal_background_color: 'rgba(52, 52, 52, 0.8)',
 };
 
 export const DarkTheme: Theme = {
