@@ -2,13 +2,17 @@ import React, {ReactNode, useState} from 'react';
 import {ModalContext} from './ModalContext';
 import {ModalProps} from './Types';
 import {
-  Button,
   Modal,
   Pressable,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useTheme} from '../theme/useTheme';
+import {Theme} from '../../constants/Types';
+import Button from '../../components/common/Button';
+import {BUTTON_TYPES} from '../../constants/Constants';
 
 interface ModalProviderProps {
   children: ReactNode;
@@ -32,35 +36,35 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({children}) => {
   const closeModal = () => {
     setModalProps(prevProps => ({...prevProps, isVisible: false}));
   };
-
+  const {theme} = useTheme();
   return (
     <ModalContext.Provider
       value={{isVisible: modalProps.isVisible, openModal, closeModal}}>
       {children}
       <Modal transparent animationType="fade" visible={modalProps.isVisible}>
-        <TouchableOpacity
-          onPress={closeModal}
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+        <TouchableOpacity style={styles(theme).container} onPress={closeModal}>
           <Pressable>
-            <View style={{height: 200, width: 200, backgroundColor: 'red'}}>
-              <Text style={{fontSize: 50}}>{modalProps.title}</Text>
-              {modalProps?.text && (
-                <Text style={{fontSize: 20}}>{modalProps?.text}</Text>
+            <View style={styles(theme).modalContainer}>
+              <View style={styles(theme).textContainer}>
+                <Text style={styles(theme).titleStyle}>{modalProps.title}</Text>
+                {modalProps?.subTitle && (
+                  <Text style={styles(theme).subTitleStyle}>
+                    {modalProps?.subTitle}
+                  </Text>
+                )}
+              </View>
+              {modalProps && modalProps?.buttons && (
+                <View style={styles(theme).buttonContainer}>
+                  {modalProps?.buttons.map((button, index) => (
+                    <Button
+                      type={BUTTON_TYPES.text}
+                      key={index}
+                      title={button.label}
+                      onPress={button.onClick}
+                    />
+                  ))}
+                </View>
               )}
-              {modalProps &&
-                modalProps?.buttons &&
-                modalProps?.buttons.map((button, index) => (
-                  <Button
-                    key={index}
-                    title={button.label}
-                    onPress={button.onClick}
-                  />
-                ))}
             </View>
           </Pressable>
         </TouchableOpacity>
@@ -68,3 +72,43 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({children}) => {
     </ModalContext.Provider>
   );
 };
+
+const styles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: theme.colors.modal_background_color,
+    },
+    modalContainer: {
+      backgroundColor: theme.colors.background_color,
+      justifyContent: 'center',
+      textAlign: 'center',
+      borderRadius: theme.sizes.border_radius,
+      borderColor: theme.colors.button_border,
+      borderWidth: 1,
+    },
+    titleStyle: {
+      fontSize: theme.sizes.large,
+      color: theme.colors.text_color,
+    },
+    subTitleStyle: {
+      fontSize: theme.sizes.medium,
+      color: theme.colors.text_color,
+      textAlign: 'center',
+      marginTop: theme.sizes.small,
+    },
+    buttonContainer: {
+      borderTopWidth: 1,
+      borderColor: theme.colors.button_border,
+      flex: 1,
+      alignItems: 'center',
+    },
+    textContainer: {
+      padding: theme.sizes.large,
+      paddingHorizontal: theme.sizes.extra_extra_large,
+    },
+    button: {},
+  });
