@@ -99,7 +99,6 @@ const styles = (theme: Theme, disabled?: boolean) =>
       borderRadius: theme.sizes.border_radius,
       width: theme.sizes.button_width as DimensionValue,
       padding: theme.sizes.small,
-      marginVertical: theme.sizes.medium,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: disabled
@@ -114,7 +113,6 @@ const styles = (theme: Theme, disabled?: boolean) =>
         : theme.colors.button_border,
       width: theme.sizes.button_width as DimensionValue,
       padding: theme.sizes.small,
-      marginVertical: theme.sizes.medium,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -122,7 +120,6 @@ const styles = (theme: Theme, disabled?: boolean) =>
       borderRadius: theme.sizes.border_radius,
       width: theme.sizes.button_width as DimensionValue,
       padding: theme.sizes.small,
-      marginVertical: theme.sizes.medium,
       alignItems: 'center',
       justifyContent: 'center',
     },

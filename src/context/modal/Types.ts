@@ -2,7 +2,7 @@ export interface ModalProps {
   isVisible: boolean;
   buttons?: ModalButton[];
   title?: string;
-  text?: string;
+  subTitle?: string;
 }
 
 interface ModalButton {

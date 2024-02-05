@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {dashboardScreen, loginScreen} from '../../constants/Screens';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
@@ -9,12 +9,35 @@ import {BUTTON_TYPES} from '../../constants/Constants';
 import {useTheme} from '../../context/theme/useTheme';
 import Wrapper from '../../components/common/Wrapper';
 import CustomText from '../../components/common/CustomText';
+import {useModal} from '../../context/modal/useModal';
 // import authService from './appwrite/auth';
 
 function HomeScreen(): JSX.Element {
   const {changeTheme} = useTheme();
-
+  const {openModal} = useModal();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
+  useEffect(() => {
+    openModal({
+      title: 'This is a test message',
+      subTitle: 'This is a subtittle',
+      buttons: [
+        {
+          label: 'Ok',
+          onClick: () => {
+            console.log('I am here');
+          },
+        },
+        {
+          label: 'Done',
+          onClick: () => {
+            console.log('I am done');
+          },
+        },
+      ],
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const goToLoginScreen = () => {
     navigation.navigate(loginScreen);
