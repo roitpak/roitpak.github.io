@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {Text, TouchableOpacity} from 'react-native';
 import {dashboardScreen, loginScreen} from '../../constants/Screens';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -9,35 +9,11 @@ import {BUTTON_TYPES} from '../../constants/Constants';
 import {useTheme} from '../../context/theme/useTheme';
 import Wrapper from '../../components/common/Wrapper';
 import CustomText from '../../components/common/CustomText';
-import {useModal} from '../../context/modal/useModal';
 // import authService from './appwrite/auth';
 
 function HomeScreen(): JSX.Element {
   const {changeTheme} = useTheme();
-  const {openModal} = useModal();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-
-  useEffect(() => {
-    openModal({
-      title: 'This is a test message',
-      subTitle: 'This is a subtittle',
-      buttons: [
-        {
-          label: 'Ok',
-          onClick: () => {
-            console.log('I am here');
-          },
-        },
-        {
-          label: 'Done',
-          onClick: () => {
-            console.log('I am done');
-          },
-        },
-      ],
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const goToLoginScreen = () => {
     navigation.navigate(loginScreen);
@@ -47,7 +23,6 @@ function HomeScreen(): JSX.Element {
   };
 
   const {user} = useUser();
-  console.log(styles);
   return (
     <Wrapper>
       <TouchableOpacity onPress={changeTheme}>
@@ -64,24 +39,5 @@ function HomeScreen(): JSX.Element {
     </Wrapper>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default HomeScreen;
