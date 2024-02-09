@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {useUser} from '../../context/user/useUser';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
-import {addPostScreen, loginScreen} from '../../constants/Screens';
+import {addPostScreen, homeScreen, loginScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ADMIN_LABEL} from '../../constants/Constants';
+import {ADMIN_LABEL, BUTTON_TYPES} from '../../constants/Constants';
 import {Post} from '../../appwrite/types/posts';
 import {useModal} from '../../context/modal/useModal';
 import postService from '../../appwrite/posts';
@@ -48,6 +48,10 @@ function DashboardScreen(): JSX.Element {
     navigation.navigate(addPostScreen, item);
   };
 
+  const goToHomeScreen = () => {
+    navigation.navigate(homeScreen);
+  };
+
   return (
     <Wrapper>
       <AddPostModal
@@ -77,6 +81,11 @@ function DashboardScreen(): JSX.Element {
       <Button
         title={user ? 'Log Out' : 'Sign in'}
         onPress={user ? logUserOut : goToSign}
+      />
+      <Button
+        type={BUTTON_TYPES.filled}
+        title="Go to HomeScreen"
+        onPress={goToHomeScreen}
       />
     </Wrapper>
   );

@@ -20,7 +20,8 @@ function MainStackScreen(): JSX.Element {
     prefixes: ['http://localhost:19006/', 'mychat://'],
     config: {
       screens: {
-        HomeScreen: '',
+        dashboardScreen: '',
+        homeScreen: 'myself',
         loginScreen: loginScreen,
         // adminDashboardScreen: '?:id/Search',
         NotFound: '*',
@@ -31,10 +32,10 @@ function MainStackScreen(): JSX.Element {
     <NavigationContainer linking={linking}>
       <Stack.Navigator
         screenOptions={headerHidden}
-        initialRouteName={homeScreen}>
+        initialRouteName={dashboardScreen}>
+        <Stack.Screen name={dashboardScreen} component={DashboardScreen} />
         <Stack.Screen name={homeScreen} component={HomeScreen} />
         <Stack.Screen name={loginScreen} component={LoginScreen} />
-        <Stack.Screen name={dashboardScreen} component={DashboardScreen} />
         <Stack.Screen name={addPostScreen} component={PostInfoScreen} />
       </Stack.Navigator>
     </NavigationContainer>

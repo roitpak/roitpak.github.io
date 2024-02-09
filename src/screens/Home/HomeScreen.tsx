@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Linking, Platform, StyleSheet, View} from 'react-native';
 import {dashboardScreen, loginScreen} from '../../constants/Screens';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -15,10 +9,11 @@ import {BUTTON_TYPES} from '../../constants/Constants';
 import {useTheme} from '../../context/theme/useTheme';
 import Wrapper from '../../components/common/Wrapper';
 import CustomText from '../../components/common/CustomText';
-// import authService from './appwrite/auth';
 import strings from '../../constants/strings.json';
+import links from '../../constants/links.json';
 import {Theme} from '../../constants/Types';
 import portrait from '../../assets/img/portrait.png';
+import Icon from '../../assets/Icon';
 
 function HomeScreen(): JSX.Element {
   const {isDarkMode, changeTheme, theme} = useTheme();
@@ -36,9 +31,12 @@ function HomeScreen(): JSX.Element {
     <Wrapper>
       <View style={styles(theme).container}>
         <CustomText title={strings.name} type="h1" />
-        <TouchableOpacity onPress={changeTheme}>
-          <CustomText type="h2" title={isDarkMode ? 'Light>' : 'Dark>'} />
-        </TouchableOpacity>
+        <Icon
+          onPress={changeTheme}
+          icon={isDarkMode ? 'sun' : 'contrast'}
+          size={theme.sizes.large}
+          color={theme.colors.text_color}
+        />
       </View>
       <View style={styles(theme).imageTextContainer}>
         <View style={styles(theme).textContainer}>
@@ -55,9 +53,45 @@ function HomeScreen(): JSX.Element {
       </View>
       <CustomText
         style={styles(theme).introMessageStyle}
-        type="p1"
+        type="p2"
         title={strings.introParagraph}
       />
+      <View style={styles(theme).linksContainer}>
+        <Icon
+          onPress={() => Linking.openURL(links.github)}
+          style={styles(theme).linkIcons}
+          icon="github"
+          size={theme.sizes.extra_large}
+          color={theme.colors.text_color}
+        />
+        <Icon
+          onPress={() => Linking.openURL(links.linkedIn)}
+          style={styles(theme).linkIcons}
+          icon="linkedin"
+          size={theme.sizes.extra_large}
+          color={theme.colors.text_color}
+        />
+        <Icon
+          onPress={() => Linking.openURL(`mailto:${links.mail}`)}
+          style={styles(theme).linkIcons}
+          icon="mail"
+          size={theme.sizes.extra_large}
+          color={theme.colors.text_color}
+        />
+        <Icon
+          onPress={() => Linking.openURL(links.youTube)}
+          style={styles(theme).linkIcons}
+          icon="youtube"
+          size={theme.sizes.extra_large}
+          color={theme.colors.text_color}
+        />
+        <Icon
+          onPress={() => Linking.openURL(links.linkTree)}
+          icon="linktree"
+          size={theme.sizes.extra_large}
+          color={theme.colors.text_color}
+        />
+      </View>
       {user && <CustomText type="h2" title={`Hi ${user.name}`} />}
       {!user && <Button title="Go to login" onPress={goToLoginScreen} />}
       <Button
@@ -98,6 +132,16 @@ const styles = (theme: Theme) =>
     },
     introMessageStyle: {
       textAlign: 'justify',
+    },
+    linksContainer: {
+      flexDirection: 'row',
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: theme.sizes.extra_extra_large,
+    },
+    linkIcons: {
+      marginRight: theme.sizes.small,
     },
   });
 
