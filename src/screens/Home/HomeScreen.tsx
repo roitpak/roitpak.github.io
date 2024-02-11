@@ -92,13 +92,23 @@ function HomeScreen(): JSX.Element {
           color={theme.colors.text_color}
         />
       </View>
-      {user && <CustomText type="h2" title={`Hi ${user.name}`} />}
-      {!user && <Button title="Go to login" onPress={goToLoginScreen} />}
-      <Button
-        type={BUTTON_TYPES.filled}
-        title="Go to Dashboard"
-        onPress={goToDashboardScreen}
-      />
+
+      <View style={styles(theme).bottomContainer}>
+        {user ? (
+          <CustomText
+            type="h2"
+            title={`${strings.hi} ${user.name}. ${strings.feelsGood}`}
+          />
+        ) : (
+          <Button title={strings.goToLogin} onPress={goToLoginScreen} />
+        )}
+        <Button
+          buttonStyle={styles(theme).buttonStyle}
+          type={BUTTON_TYPES.filled}
+          title={strings.goToDashboard}
+          onPress={goToDashboardScreen}
+        />
+      </View>
     </Wrapper>
   );
 }
@@ -142,6 +152,12 @@ const styles = (theme: Theme) =>
     },
     linkIcons: {
       marginRight: theme.sizes.small,
+    },
+    buttonStyle: {
+      marginTop: theme.sizes.medium,
+    },
+    bottomContainer: {
+      alignItems: 'center',
     },
   });
 

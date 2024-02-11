@@ -10,4 +10,5 @@ export interface Post {
   githubUrl?: URL;
   tldr?: string;
   videoUrl?: URL;
+  $createdAt?: string;
 }
