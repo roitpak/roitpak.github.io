@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {useTheme} from '../../context/theme/useTheme';
 import {Theme} from '../../constants/Types';
-// import {Dimensions} from '../../helpers/Dimensions';
+import {Dimensions} from '../../helpers/Dimensions';
 
 interface WrapperProps extends PropsWithChildren {
   scrollEnabled?: boolean;
@@ -16,6 +16,7 @@ interface WrapperProps extends PropsWithChildren {
   style?: ViewStyle;
   contentContainerStyle?: ViewStyle;
   scrollViewStyle?: ViewStyle;
+  floatingContent?: ReactElement;
 }
 
 const Wrapper = forwardRef<any, WrapperProps>(
@@ -27,6 +28,7 @@ const Wrapper = forwardRef<any, WrapperProps>(
       style,
       contentContainerStyle,
       scrollViewStyle,
+      floatingContent,
     },
     ref,
   ) => {
@@ -50,6 +52,7 @@ const Wrapper = forwardRef<any, WrapperProps>(
               <View>{children}</View>
             </ScrollView>
           </View>
+          {floatingContent}
         </div>
       </SafeAreaView>
     );
@@ -62,11 +65,13 @@ const styles = (theme: Theme) =>
   StyleSheet.create({
     scrollContainer: {
       padding: theme.sizes.extra_extra_large,
+      maxWidth: 800,
+      alignSelf: 'center',
     },
   });
 
 const containerStyle = (theme: Theme) => ({
   backgroundImage: `linear-gradient(to bottom right, ${theme.colors.gradient_colors[0]}, ${theme.colors.gradient_colors[1]}, ${theme.colors.gradient_colors[2]})`,
   width: '100%',
-  height: '100%',
+  height: Dimensions.windowHeight,
 });

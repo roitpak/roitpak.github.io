@@ -89,10 +89,12 @@ const styles = (theme: Theme) =>
       borderRadius: theme.sizes.border_radius,
       borderColor: theme.colors.button_border,
       borderWidth: 1,
+      maxWidth: '80%',
     },
     titleStyle: {
       fontSize: theme.sizes.large,
       color: theme.colors.text_color,
+      textAlign: 'center',
     },
     subTitleStyle: {
       fontSize: theme.sizes.medium,
@@ -103,7 +105,7 @@ const styles = (theme: Theme) =>
     buttonContainer: {
       borderTopWidth: 1,
       borderColor: theme.colors.button_border,
-      flex: 1,
+      // flex: 1,
       alignItems: 'center',
     },
     textContainer: {

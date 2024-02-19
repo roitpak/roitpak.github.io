@@ -18,6 +18,7 @@ interface WrapperProps extends PropsWithChildren {
   style?: ViewStyle;
   contentContainerStyle?: ViewStyle;
   scrollViewStyle?: ViewStyle;
+  floatingContent?: ReactElement;
 }
 
 const Wrapper = forwardRef<any, WrapperProps>(
@@ -29,6 +30,7 @@ const Wrapper = forwardRef<any, WrapperProps>(
       style,
       contentContainerStyle,
       scrollViewStyle,
+      floatingContent,
     },
     ref,
   ) => {
@@ -64,6 +66,7 @@ const Wrapper = forwardRef<any, WrapperProps>(
               <View>{children}</View>
             </KeyboardAwareScrollView>
           </View>
+          {floatingContent}
         </LinearGradient>
       </SafeAreaView>
     );

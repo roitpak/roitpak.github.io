@@ -48,9 +48,8 @@ function LoginScreen(): JSX.Element {
         email: email,
         password: password,
       })
-      .then(userData => {
+      .then(() => {
         navigation.navigate(dashboardScreen);
-        console.log('Appwrite Login:', userData);
         setLogin();
       })
       .catch(err => {
