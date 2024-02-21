@@ -1,6 +1,6 @@
-import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {PostContent} from '../../constants/Types';
+import React, {useEffect, useState} from 'react';
+import {Image, StyleSheet, View} from 'react-native';
+import {PostContent, Theme} from '../../constants/Types';
 import {
   CODE_POST_TYPE,
   POST_CONTENT_KEYS,
@@ -10,109 +10,140 @@ import PickImageButton from './PickImageButton';
 import CustomTextInput from '../common/CustomTextInput';
 import CustomText from '../common/CustomText';
 import Button from '../common/Button';
+import TextOrCodeSwitch from './TextOrCodeSwitch';
+import {useTheme} from '../../context/theme/useTheme';
+import postService from '../../appwrite/posts';
+import {Dimensions} from '../../helpers/Dimensions';
+import Icon from '../../assets/Icon';
+import strings from '../../constants/strings.json';
 
 interface NewPostComponentProps {
   newPost: PostContent;
   onChange: (post: PostContent) => void;
   onSave: () => void;
+  loading?: boolean;
+  onPressRemoveImage?: () => void;
 }
 
 function NewPostComponent({
   newPost,
   onSave,
   onChange,
+  loading,
 }: NewPostComponentProps): JSX.Element {
   const onChangeValue = (value: any, key: string) => {
     onChange({...newPost, [key]: value});
   };
+  const [imageUri, setImageURl] = useState<any>(null);
+
+  const {theme} = useTheme();
+  useEffect(() => {
+    if (newPost?.image_id) {
+      setImageURl(postService.getFilePreview(newPost?.image_id));
+    }
+  }, [newPost]);
+
+  const onPressCross = () => {
+    setImageURl(null);
+    onChange({...newPost, image_id: undefined});
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={styles(theme).container}>
       <CustomTextInput
         placeholder="title"
         value={newPost.title}
         onChangeText={value => onChangeValue(value, POST_CONTENT_KEYS.title)}
       />
-      <CustomTextInput
-        placeholder="subtitle"
-        value={newPost.subtitle}
-        onChangeText={value => onChangeValue(value, POST_CONTENT_KEYS.subtitle)}
-      />
-      <View style={styles.selectOne}>
-        <CustomText title={'What is the type of this post?'} type={'p1'} />
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={[
-              styles.typeSelection,
-              newPost.content_type === TEXT_POST_TYPE && {
-                backgroundColor: 'blue',
-              },
-            ]}
-            onPress={() =>
-              onChangeValue(TEXT_POST_TYPE, POST_CONTENT_KEYS.content_type)
-            }>
-            <CustomText title={'Text'} type={'h2'} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.typeSelection,
-              newPost.content_type === CODE_POST_TYPE && {
-                backgroundColor: 'blue',
-              },
-            ]}
-            onPress={() =>
-              onChangeValue(CODE_POST_TYPE, POST_CONTENT_KEYS.content_type)
-            }>
-            <CustomText title={'Code'} type={'h2'} />
-          </TouchableOpacity>
-        </View>
+      <View style={styles(theme).contentContainer}>
+        <CustomTextInput
+          placeholder="subtitle"
+          value={newPost.subtitle}
+          onChangeText={value =>
+            onChangeValue(value, POST_CONTENT_KEYS.subtitle)
+          }
+        />
       </View>
-      <PickImageButton
-        imagePicked={image => onChangeValue(image, POST_CONTENT_KEYS.image)}
-      />
+      {!imageUri && (
+        <PickImageButton
+          imagePicked={image => onChangeValue(image, POST_CONTENT_KEYS.image)}
+        />
+      )}
+      {imageUri && (
+        <View style={styles(theme).imageContainer}>
+          <Icon
+            color={theme.colors.negative}
+            style={styles(theme).crossIcon}
+            size={theme.sizes.large}
+            icon="cross"
+            onPress={() => onPressCross()}
+          />
+
+          <Image
+            style={styles(theme).image}
+            source={{
+              uri: imageUri,
+            }}
+          />
+        </View>
+      )}
+      <View style={styles(theme).selectOne}>
+        <CustomText title={strings.whatTypePost} type={'p1'} />
+        <TextOrCodeSwitch
+          onPressText={() =>
+            onChangeValue(TEXT_POST_TYPE, POST_CONTENT_KEYS.content_type)
+          }
+          onPressCode={() =>
+            onChangeValue(CODE_POST_TYPE, POST_CONTENT_KEYS.content_type)
+          }
+          textSelected={newPost.content_type === TEXT_POST_TYPE}
+        />
+      </View>
       <CustomTextInput
         multiline
         placeholder="Content"
-        style={styles.contentInput}
+        style={styles(theme).contentInput}
         value={newPost.content}
         onChangeText={value => onChangeValue(value, POST_CONTENT_KEYS.content)}
       />
-      <Button title={'Add Post'} onPress={onSave} />
+      <Button loading={loading} title={strings.savePost} onPress={onSave} />
     </View>
   );
 }
 
 export default NewPostComponent;
 
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: 20,
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 10,
-  },
-  input: {
-    height: 30,
-    alignItems: 'center',
-    paddingHorizontal: 5,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: 'grey',
-    marginVertical: 5,
-  },
-  selectOne: {
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  row: {
-    flexDirection: 'row',
-  },
-  typeSelection: {
-    height: 20,
-    width: 50,
-    backgroundColor: 'grey',
-  },
-  contentInput: {
-    height: 300,
-    marginVertical: 10,
-  },
-});
+const styles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      marginVertical: theme.sizes.large,
+      alignItems: 'center',
+    },
+    selectOne: {
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    row: {
+      flexDirection: 'row',
+    },
+    contentInput: {
+      marginVertical: theme.sizes.large,
+    },
+    contentContainer: {
+      marginTop: theme.sizes.large,
+    },
+    image: {
+      height: 300,
+      width: Dimensions.windowWidth * 0.8,
+      resizeMode: 'contain',
+      alignSelf: 'center',
+    },
+    crossIcon: {
+      top: 0,
+      right: 0,
+      position: 'absolute',
+    },
+    imageContainer: {
+      marginVertical: theme.sizes.large,
+    },
+  });

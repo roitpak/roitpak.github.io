@@ -30,7 +30,7 @@ function Button({
   iconRight,
   buttonStyle,
   textStyle,
-  type,
+  type = BUTTON_TYPES.filled,
   disabled,
 }: ButtonProps): JSX.Element {
   const {theme} = useTheme();
@@ -59,6 +59,12 @@ function Button({
         };
     }
   };
+  const onPressTouchable = () => {
+    if (loading || disabled) {
+      return;
+    }
+    onPress();
+  };
 
   return (
     <TouchableOpacity
@@ -67,7 +73,7 @@ function Button({
         // disabled && {backgroundColor: theme.colors.button_disabled},
         buttonStyle,
       ]}
-      onPress={onPress}>
+      onPress={onPressTouchable}>
       <>
         {loading && !disabled ? (
           <ActivityIndicator

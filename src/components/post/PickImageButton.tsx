@@ -1,4 +1,5 @@
 import React, {ChangeEvent} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {Asset} from 'react-native-image-picker';
 
 interface PickImageButtonProps {
@@ -11,10 +12,16 @@ function PickImageButton({imagePicked}: PickImageButtonProps): JSX.Element {
   };
 
   return (
-    <div>
+    <View style={styles.container}>
       <input type="file" accept="image/*" onChange={onImagePicked} />
-    </div>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginVertical: 10,
+  },
+});
 
 export default PickImageButton;

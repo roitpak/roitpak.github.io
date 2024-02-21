@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {useTheme} from '../../context/theme/useTheme';
 import {Theme} from '../../constants/Types';
-import {Dimensions} from '../../helpers/Dimensions';
+// import {Dimensions} from '../../helpers/Dimensions';
 
 interface WrapperProps extends PropsWithChildren {
   scrollEnabled?: boolean;
@@ -73,5 +73,5 @@ const styles = (theme: Theme) =>
 const containerStyle = (theme: Theme) => ({
   backgroundImage: `linear-gradient(to bottom right, ${theme.colors.gradient_colors[0]}, ${theme.colors.gradient_colors[1]}, ${theme.colors.gradient_colors[2]})`,
   width: '100%',
-  height: Dimensions.windowHeight,
+  height: '100%',
 });
