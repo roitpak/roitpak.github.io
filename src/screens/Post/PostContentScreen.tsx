@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList} from 'react-native';
-import {PostContent} from '../../constants/Types';
+import {FlatList, StyleSheet, View} from 'react-native';
+import {PostContent, Theme} from '../../constants/Types';
 import NewPostComponent from '../../components/post/NewPostComponent';
 import {BUTTON_TYPES, TEXT_POST_TYPE} from '../../constants/Constants';
 import postService from '../../appwrite/posts';
@@ -9,11 +9,15 @@ import PostComponent from '../../components/post/PostComponent';
 import CustomText from '../../components/common/CustomText';
 import Button from '../../components/common/Button';
 import Wrapper from '../../components/common/Wrapper';
+import {useTheme} from '../../context/theme/useTheme';
+import {useUser} from '../../context/user/useUser';
 
 function PostContentScreen({route}: any): JSX.Element {
   const [post, setPost] = useState(route.params);
   const [newPostData, setNewPostData] = useState<PostContent | null>(null);
+  const {isAdmin} = useUser();
 
+  const {theme} = useTheme();
   useEffect(() => {
     setPost(route.params);
   }, [route]);
@@ -68,8 +72,10 @@ function PostContentScreen({route}: any): JSX.Element {
   };
 
   return (
-    <Wrapper>
-      <CustomText title={post.title} type={'h1'} />
+    <Wrapper style={styles(theme).container}>
+      <View style={styles(theme).headerContainer}>
+        <CustomText title={post.title} type={'h1'} />
+      </View>
       {post.contents.length === 0 && !newPostData && (
         <CustomText
           title={'Looks empty here, start by adding by clicking button below'}
@@ -88,11 +94,28 @@ function PostContentScreen({route}: any): JSX.Element {
           onSave={onSave}
         />
       )}
-      {!newPostData && (
-        <Button title="+" type={BUTTON_TYPES.filled} onPress={onAdd} />
+      {!newPostData && isAdmin && (
+        <Button
+          buttonStyle={styles(theme).buttonStyle}
+          title="Add Content"
+          type={BUTTON_TYPES.filled}
+          onPress={onAdd}
+        />
       )}
     </Wrapper>
   );
 }
+const styles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      paddingBottom: theme.sizes.extra_extra_large * 2,
+    },
+    headerContainer: {
+      marginBottom: theme.sizes.extra_extra_large,
+    },
+    buttonStyle: {
+      alignSelf: 'center',
+    },
+  });
 
 export default PostContentScreen;

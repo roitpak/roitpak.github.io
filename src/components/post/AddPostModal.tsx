@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
 import {
-  FlatList,
   Modal,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -20,6 +18,8 @@ import CustomText from '../common/CustomText';
 import Button from '../common/Button';
 import {Theme} from '../../constants/Types';
 import {useTheme} from '../../context/theme/useTheme';
+import strings from '../../constants/strings.json';
+import Icon from '../../assets/Icon';
 // import Wrapper from '../common/Wrapper';
 
 interface AddPostModalProps {
@@ -54,8 +54,6 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
       })
       .catch(err => {
         close();
-        console.log('error--->');
-        console.log(err.message);
         if (err instanceof Error) {
           openModal({title: err.message});
         } else {
@@ -71,6 +69,9 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
   };
 
   const addCategory = () => {
+    if (!tempCategory) {
+      return;
+    }
     setCategory(prevCategory => [...prevCategory, tempCategory]);
     setTempCategory('');
   };
@@ -80,45 +81,60 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
       <TouchableOpacity onPress={close} style={styles(theme).touchable}>
         <TouchableWithoutFeedback>
           <View style={styles(theme).content}>
-            <CustomText title={'New Post'} type={'h1'} />
+            <View style={styles(theme).contentContainer}>
+              <CustomText title={strings.newPost} type={'h1'} />
+            </View>
             <CustomTextInput
+              multiline
+              style={styles(theme).contentContainer}
               placeholder={'Title'}
               value={postTitle}
               onChangeText={value => setPostTitle(value)}
             />
-            <View style={{flexDirection: 'column'}}>
+            <View style={styles(theme).contentContainer}>
               <CustomText title={'Category'} type={'p2'} />
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View>
                 <CustomTextInput
+                  style={styles(theme).contentContainer}
                   value={tempCategory}
                   onChangeText={value => setTempCategory(value)}
-                  placeholder="eg: NodeJS"
+                  placeholder={strings.egNodeJS}
                 />
-                <TouchableOpacity onPress={addCategory}>
-                  <CustomText title={'Add'} type={'p2'} />
+                <TouchableOpacity
+                  onPress={addCategory}
+                  style={styles(theme).addContainer}>
+                  <CustomText type={'p1'} title={strings.addCategory} />
+                  <Icon
+                    onPress={addCategory}
+                    size={theme.sizes.large}
+                    color={theme.colors.text_color}
+                    icon="plus"
+                  />
                 </TouchableOpacity>
               </View>
-              <FlatList
-                horizontal={true}
-                data={category}
-                renderItem={({item, index}) => (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginHorizontal: 5,
-                      marginVertical: 10,
-                    }}>
-                    <CustomText title={item} type={'p2'} />
+              {category && (
+                <View style={styles(theme).categoryContainer}>
+                  {category.map((item, index) => (
                     <TouchableOpacity
-                      onPress={() => onPressCategoryItem(index)}>
-                      <Text>*</Text>
+                      onPress={() => onPressCategoryItem(index)}
+                      style={styles(theme).category}>
+                      <CustomText title={item} type={'p2'} />
+                      <View style={styles(theme).crossIcon}>
+                        <Icon
+                          onPress={() => onPressCategoryItem(index)}
+                          size={theme.sizes.medium}
+                          color={theme.colors.button_background}
+                          icon="cross"
+                        />
+                      </View>
                     </TouchableOpacity>
-                  </View>
-                )}
-                keyExtractor={item => item}
-              />
+                  ))}
+                </View>
+              )}
             </View>
-            <Button title={'Add post'} onPress={addPost} />
+            <View style={styles(theme).contentContainer}>
+              <Button title={'Add post'} onPress={addPost} />
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </TouchableOpacity>
@@ -132,9 +148,36 @@ const styles = (theme: Theme) =>
       backgroundColor: 'rgba(52, 52, 52, 0.8)',
       alignItems: 'center',
       justifyContent: 'center',
+      padding: theme.sizes.extra_large,
     },
     content: {
       backgroundColor: theme.colors.background_color,
+      paddingHorizontal: theme.sizes.large,
+      paddingBottom: theme.sizes.large,
+      borderRadius: theme.sizes.border_radius,
+    },
+    contentContainer: {
+      marginTop: theme.sizes.medium,
+    },
+    categoryContainer: {
+      flexDirection: 'row',
+      marginTop: theme.sizes.large,
+    },
+    category: {
+      padding: theme.sizes.extra_extra_small,
+      borderColor: theme.colors.text_color,
+      borderWidth: 1,
+      borderRadius: 2,
+      alignContent: 'center',
+      justifyContent: 'center',
+      marginRight: theme.sizes.large,
+    },
+    crossIcon: {top: -10, right: -22, position: 'absolute'},
+    addContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: theme.sizes.medium,
     },
   });
 

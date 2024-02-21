@@ -116,6 +116,7 @@ export class PostService {
         throw error;
       });
     tempPost?.contents?.push(id);
+    // add post data contents to post
     if (post?.$id) {
       await this.updatePost(post.$id, tempPost)
         .then(response => {
@@ -145,6 +146,45 @@ export class PostService {
         myConfig.REACT_APP_POSTS_COLLECTION,
         slug,
         post,
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updatePostContent(slug: string, post: PostContent) {
+    let postData = {
+      title: post?.title,
+      subtitle: post?.subtitle,
+      image_id: null,
+      content: post?.content,
+      content_type: post?.content_type,
+    };
+    // if image is deleted, remove from server
+    if (!post?.image_id) {
+      const response = await this.getPostContentData(slug);
+      if (response?.image_id) {
+        post?.image_id && (await this.deleteFile(post?.image_id));
+      }
+    }
+    // If there is image upload it
+    if (post?.image) {
+      //if there is new Image delete last one
+      post?.image_id && (await this.deleteFile(post?.image_id));
+      await this.uploadFile(post.image)
+        .then((response: any) => {
+          postData.image_id = response.$id;
+        })
+        .catch(err => {
+          throw err;
+        });
+    }
+    try {
+      return await this.databases.updateDocument(
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_POSTS_DATA_COLLECTION,
+        slug,
+        postData,
       );
     } catch (error) {
       throw error;
