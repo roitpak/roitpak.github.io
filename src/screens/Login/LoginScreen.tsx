@@ -12,6 +12,7 @@ import Button from '../../components/common/Button';
 import {BUTTON_TYPES} from '../../constants/Constants';
 import Wrapper from '../../components/common/Wrapper';
 import CustomTextInput from '../../components/common/CustomTextInput';
+import {useTheme} from '../../context/theme/useTheme';
 
 function LoginScreen(): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -19,11 +20,14 @@ function LoginScreen(): JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPasswrod] = useState('');
   const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [validated, setValidated] = useState(false);
   const [signupMode, setSignupMode] = useState(false);
   const {openModal} = useModal();
   const {setLogin} = useUser();
+
+  const {theme} = useTheme();
 
   useEffect(() => {
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -43,6 +47,7 @@ function LoginScreen(): JSX.Element {
   }, [signupMode, email, password, name]);
 
   const onPressLogin = async () => {
+    setLoading(true);
     await authService
       .login({
         email: email,
@@ -59,10 +64,12 @@ function LoginScreen(): JSX.Element {
           openModal({title: 'Unknown error occurred'});
         }
       });
+    setLoading(false);
   };
 
   const onPressSignup = async () => {
-    authService
+    setLoading(true);
+    await authService
       .createAccount({
         email: email,
         password: password,
@@ -81,25 +88,28 @@ function LoginScreen(): JSX.Element {
           openModal({title: 'Unknown error occurred'});
         }
       });
+    setLoading(false);
   };
 
   return (
     <Wrapper>
       <CustomText type="h1" title={signupMode ? 'Signup' : 'Login'} />
-      <View style={styles.sectionContainer}>
+      <View style={styles(theme).sectionContainer}>
         <CustomTextInput
           markAsRequired
           placeholder="Email"
           value={email}
           onChangeText={value => setEmail(value)}
         />
-        <CustomTextInput
-          markAsRequired
-          placeholder="Password"
-          value={password}
-          onChangeText={value => setPasswrod(value)}
-          secureTextEntry
-        />
+        <View style={styles(theme).inputContainer}>
+          <CustomTextInput
+            markAsRequired
+            placeholder="Password"
+            value={password}
+            onChangeText={value => setPasswrod(value)}
+            secureTextEntry
+          />
+        </View>
         {signupMode && (
           <CustomTextInput
             markAsRequired
@@ -108,7 +118,7 @@ function LoginScreen(): JSX.Element {
             onChangeText={value => setName(value)}
           />
         )}
-        <View style={styles.signupTextContainer}>
+        <View style={styles(theme).signupTextContainer}>
           <CustomText
             type="p2"
             title={
@@ -123,6 +133,7 @@ function LoginScreen(): JSX.Element {
           />
         </View>
         <Button
+          loading={loading}
           type={BUTTON_TYPES.filled}
           disabled={!validated}
           title={signupMode ? 'Sign up' : 'Login'}
