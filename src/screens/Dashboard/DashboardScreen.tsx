@@ -99,6 +99,9 @@ function DashboardScreen(): JSX.Element {
           <Button title={'Add Post'} onPress={addPost} />
         </View>
       )}
+      {posts.length === 0 && (
+        <CustomText title={strings.noContent} type={'h2'} />
+      )}
       {posts && posts.map(item => <BlogItem item={item} />)}
     </Wrapper>
   );

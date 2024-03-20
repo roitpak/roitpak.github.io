@@ -1,45 +1,35 @@
 import {StyleSheet} from 'react-native';
+import {Theme} from '../../constants/Types';
 
-export const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  input: {
-    height: 30,
-    alignItems: 'center',
-    paddingHorizontal: 5,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: 'grey',
-    marginVertical: 5,
-  },
-  signupTextContainer: {
-    flexDirection: 'row',
-    marginVertical: 10,
-  },
-  header: {
-    fontSize: 20,
-    alignSelf: 'center',
-    marginTop: 20,
-  },
-  signupText: {
-    fontSize: 12,
-  },
-  signupTextHighlight: {
-    fontSize: 13,
-    fontWeight: 'bold',
-  },
-});
+export const styles = (theme: Theme) =>
+  StyleSheet.create({
+    sectionContainer: {
+      marginTop: theme.sizes.large,
+    },
+    sectionTitle: {
+      fontSize: theme.sizes.extra_large,
+      fontWeight: 'bold',
+    },
+    sectionDescription: {
+      marginTop: theme.sizes.medium,
+      fontSize: theme.sizes.large,
+      fontWeight: 'bold',
+    },
+    highlight: {
+      fontWeight: 'bold',
+    },
+    signupTextContainer: {
+      flexDirection: 'row',
+      marginVertical: theme.sizes.medium,
+    },
+    signupText: {
+      fontSize: theme.sizes.medium,
+    },
+    signupTextHighlight: {
+      fontSize: theme.sizes.medium,
+      fontWeight: 'bold',
+    },
+    inputContainer: {
+      marginTop: theme.sizes.medium,
+    },
+  });
