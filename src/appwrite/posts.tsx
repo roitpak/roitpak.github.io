@@ -140,12 +140,25 @@ export class PostService {
   }
 
   async updatePost(slug: string, post: Post) {
+    let tempPost = {
+      $id: post.$id,
+      title: post.title,
+      contents: post.contents,
+      category: post.category,
+      shareUrl: post.shareUrl,
+      likes: post.likes,
+      githubUrl: post.githubUrl,
+      uploadedBy: post.uploadedBy,
+      status: post.status,
+      tldr: post.tldr,
+      videoUrl: post.videoUrl,
+    };
     try {
       return await this.databases.updateDocument(
         myConfig.REACT_APP_POSTS_DATABASE,
         myConfig.REACT_APP_POSTS_COLLECTION,
         slug,
-        post,
+        tempPost,
       );
     } catch (error) {
       throw error;

@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Platform, StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {useUser} from '../../context/user/useUser';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {loginScreen} from '../../constants/Screens';
@@ -19,6 +25,7 @@ import {Theme} from '../../constants/Types';
 import DarkModeButton from '../../components/common/DarkModeButton';
 import DashboardButtonGroup from '../../components/dashboard/DashboardButtonGroup';
 import BlogItem from '../../components/dashboard/BlogItem';
+import Status from '../../components/post/enum/PostStatusEnum';
 
 function DashboardScreen(): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -27,6 +34,8 @@ function DashboardScreen(): JSX.Element {
   const {openModal, closeModal} = useModal();
   const {theme} = useTheme();
   const [showAddPost, setShowAddPost] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   const goToSign = () => navigation.navigate(loginScreen);
 
@@ -49,7 +58,13 @@ function DashboardScreen(): JSX.Element {
   };
 
   useEffect(() => {
-    postService
+    getPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAdmin]);
+
+  const getPosts = async () => {
+    setLoading(true);
+    await postService
       .getPosts(isAdmin)
       .then(data => {
         if (data) {
@@ -63,11 +78,26 @@ function DashboardScreen(): JSX.Element {
           openModal({title: 'Unknown error occurred'});
         }
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin]);
+    setLoading(false);
+  };
+
+  const onPostStatusChange = async (item: Post, status: Status) => {
+    setLoading(true);
+    await postService
+      .updatePost(item?.$id ?? '', {...item, status: status})
+      .then(response => {
+        return response;
+      })
+      .catch(err => console.log(err));
+    await getPosts();
+    setLoading(false);
+  };
 
   return (
-    <Wrapper>
+    <Wrapper
+      refreshControl={
+        <RefreshControl refreshing={loading} onRefresh={getPosts} />
+      }>
       <AddPostModal
         showAddPost={showAddPost}
         close={() => setShowAddPost(false)}
@@ -85,11 +115,17 @@ function DashboardScreen(): JSX.Element {
           />
         </View>
       </View>
+      <CustomText
+        style={styles(theme).introMessageStyle}
+        title={strings.dashboardScreenWelcomeSub}
+        type={'p2'}
+      />
+
       <DashboardButtonGroup />
       {user && (
         <View style={styles(theme).header2StringContainer}>
           <CustomText
-            title={`${strings.hi} ${isAdmin && ADMIN_LABEL} ${user.name}`}
+            title={`${strings.hi} ${isAdmin ? ADMIN_LABEL : ''} ${user.name}`}
             type={'h2'}
           />
         </View>
@@ -102,7 +138,21 @@ function DashboardScreen(): JSX.Element {
       {posts.length === 0 && (
         <CustomText title={strings.noContent} type={'h2'} />
       )}
-      {posts && posts.map(item => <BlogItem item={item} />)}
+      {loading && (
+        <ActivityIndicator
+          style={styles(theme).indicator}
+          size={'small'}
+          color={theme.colors.text_color}
+        />
+      )}
+      {posts &&
+        posts.map(item => (
+          <BlogItem
+            loading={loading}
+            onPostStatusChange={onPostStatusChange}
+            item={item}
+          />
+        ))}
     </Wrapper>
   );
 }
@@ -130,6 +180,13 @@ const styles = (theme: Theme) =>
     },
     topButton: {
       alignSelf: Platform.OS === 'web' ? 'center' : undefined,
+    },
+    indicator: {
+      marginTop: theme.sizes.medium,
+    },
+    introMessageStyle: {
+      textAlign: 'justify',
+      marginBottom: theme.sizes.medium,
     },
   });
 

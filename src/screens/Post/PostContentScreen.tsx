@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
 import {PostContent, Theme} from '../../constants/Types';
 import NewPostComponent from '../../components/post/NewPostComponent';
 import {BUTTON_TYPES, TEXT_POST_TYPE} from '../../constants/Constants';
@@ -11,11 +11,16 @@ import Button from '../../components/common/Button';
 import Wrapper from '../../components/common/Wrapper';
 import {useTheme} from '../../context/theme/useTheme';
 import {useUser} from '../../context/user/useUser';
+import PostStatusButton from '../../components/post/PostStatusButton';
+import Status from '../../components/post/enum/PostStatusEnum';
+import {Post} from '../../appwrite/types/posts';
 
 function PostContentScreen({route}: any): JSX.Element {
   const [post, setPost] = useState(route.params);
   const [newPostData, setNewPostData] = useState<PostContent | null>(null);
   const {isAdmin} = useUser();
+
+  const [loading, setLoading] = useState(false);
 
   const {theme} = useTheme();
   useEffect(() => {
@@ -60,7 +65,7 @@ function PostContentScreen({route}: any): JSX.Element {
     await postService
       .getPost(post.$id)
       .then(response => {
-        console.log(response);
+        setPost(response);
       })
       .catch(err => {
         if (err instanceof Error) {
@@ -70,16 +75,40 @@ function PostContentScreen({route}: any): JSX.Element {
         }
       });
   };
+  const onPostStatusChange = async (item: Post, status: Status) => {
+    setLoading(true);
+    await postService
+      .updatePost(item?.$id ?? '', {...item, status: status})
+      .then(response => {
+        setPost(response);
+      })
+      .catch(err => console.log(err));
+    setLoading(false);
+  };
 
   return (
     <Wrapper style={styles(theme).container}>
       <View style={styles(theme).headerContainer}>
         <CustomText title={post.title} type={'h1'} />
       </View>
+      {loading && (
+        <ActivityIndicator
+          style={styles(theme).indicator}
+          size={'small'}
+          color={theme.colors.text_color}
+        />
+      )}
       {post.contents.length === 0 && !newPostData && (
         <CustomText
           title={'Looks empty here, start by adding by clicking button below'}
           type={'p1'}
+        />
+      )}
+      {isAdmin && (
+        <PostStatusButton
+          loading={loading}
+          onChange={(status: Status) => onPostStatusChange(post, status)}
+          status={post.status ? post.status : Status.pending}
         />
       )}
       <FlatList
@@ -115,6 +144,9 @@ const styles = (theme: Theme) =>
     },
     buttonStyle: {
       alignSelf: 'center',
+    },
+    indicator: {
+      marginTop: theme.sizes.medium,
     },
   });
 

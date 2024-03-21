@@ -10,17 +10,24 @@ import {Post} from '../../appwrite/types/posts';
 import {formatDate} from '../../helpers/functions';
 import strings from '../../constants/strings.json';
 import Icon from '../../assets/Icon';
+import {useUser} from '../../context/user/useUser';
+import PostStatusButton from '../post/PostStatusButton';
+import Status from '../post/enum/PostStatusEnum';
 
 interface AddPostModalProps {
   item: Post;
+  onPostStatusChange: (item: Post, status: Status) => void;
+  loading: boolean;
 }
 
-const BlogItem = ({item}: AddPostModalProps) => {
+const BlogItem = ({item, onPostStatusChange, loading}: AddPostModalProps) => {
   const {theme} = useTheme();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const onPressItem = () => {
     navigation.navigate(addPostScreen, item);
   };
+
+  const {isAdmin} = useUser();
 
   return (
     <TouchableOpacity onPress={onPressItem} style={styles(theme).container}>
@@ -28,7 +35,17 @@ const BlogItem = ({item}: AddPostModalProps) => {
         <CustomText title={item?.title} type={'h1'} />
       </View>
       {item?.$createdAt && (
-        <CustomText title={formatDate(new Date(item?.$createdAt))} type="p2" />
+        <View style={styles(theme).timeContainer}>
+          <Icon
+            icon={'clock'}
+            size={theme.sizes.medium}
+            color={theme.colors.text_color}
+          />
+          <CustomText
+            title={formatDate(new Date(item?.$createdAt))}
+            type="p2"
+          />
+        </View>
       )}
       <View style={styles(theme).categoryContainer}>
         {item?.category.map(item => (
@@ -49,6 +66,13 @@ const BlogItem = ({item}: AddPostModalProps) => {
           color={theme.colors.button_text}
         />
       </View>
+      {isAdmin && (
+        <PostStatusButton
+          loading={loading}
+          onChange={(status: Status) => onPostStatusChange(item, status)}
+          status={item.status ? item.status : Status.pending}
+        />
+      )}
     </TouchableOpacity>
   );
 };
@@ -61,9 +85,9 @@ const styles = (theme: Theme) =>
       marginBottom: theme.sizes.extra_extra_small,
     },
     category: {
-      padding: theme.sizes.extra_extra_small,
-      borderColor: theme.colors.text_color,
-      borderWidth: 1,
+      padding: theme.sizes.extra_small,
+      borderColor: theme.colors.button_border,
+      borderWidth: 1.5,
       borderRadius: 2,
       alignContent: 'center',
       justifyContent: 'center',
@@ -80,6 +104,10 @@ const styles = (theme: Theme) =>
     },
     continueText: {
       color: theme.colors.button_text,
+    },
+    timeContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   });
 export default BlogItem;
