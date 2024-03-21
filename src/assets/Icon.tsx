@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import IcoMoon, {IconProps} from 'react-icomoon';
 import iconSet from './selection.json';
 import {Svg, Path} from 'react-native-svg';
@@ -7,7 +7,7 @@ import {Svg, Path} from 'react-native-svg';
 const Icon = (props: IconProps & {onPress?: () => void}) => {
   const {onPress, ...iconProps} = props;
 
-  return (
+  return onPress ? (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <IcoMoon
         native
@@ -17,6 +17,16 @@ const Icon = (props: IconProps & {onPress?: () => void}) => {
         {...iconProps}
       />
     </TouchableOpacity>
+  ) : (
+    <View style={styles.container}>
+      <IcoMoon
+        native
+        SvgComponent={Svg}
+        PathComponent={Path}
+        iconSet={iconSet}
+        {...iconProps}
+      />
+    </View>
   );
 };
 const styles = StyleSheet.create({
