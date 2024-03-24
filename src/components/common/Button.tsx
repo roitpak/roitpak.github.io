@@ -4,6 +4,7 @@ import {
   DimensionValue,
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -19,7 +20,7 @@ interface ButtonProps {
   disabled?: boolean;
   iconRight?: string;
   buttonStyle?: ViewStyle;
-  textStyle?: ViewStyle;
+  textStyle?: TextStyle;
   type?: BottomTypes;
 }
 

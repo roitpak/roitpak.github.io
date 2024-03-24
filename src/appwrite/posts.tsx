@@ -44,8 +44,13 @@ export class PostService {
 
   async getPosts(isAdmin?: boolean) {
     const queries = isAdmin
-      ? [Query.limit(10), Query.offset(0)]
-      : [Query.equal('status', 'published'), Query.limit(10), Query.offset(0)];
+      ? [Query.limit(10), Query.offset(0), Query.orderDesc('$createdAt')]
+      : [
+          Query.equal('status', 'published'),
+          Query.limit(10),
+          Query.offset(0),
+          Query.orderDesc('$createdAt'),
+        ];
     try {
       const response = await this.databases.listDocuments(
         myConfig.REACT_APP_POSTS_DATABASE,
@@ -92,7 +97,6 @@ export class PostService {
     if (data?.image) {
       await this.uploadFile(data.image)
         .then((response: any) => {
-          console.log('Is the response here---->', response);
           postData.image_id = response.$id;
         })
         .catch(err => {

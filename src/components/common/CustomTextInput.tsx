@@ -24,6 +24,7 @@ interface CustomInputProps {
   numberOfLines?: number;
   autoCapitalize?: 'characters' | 'none' | 'sentences' | 'words' | undefined;
   multiline?: boolean;
+  autoFocus?: boolean;
 }
 
 function CustomTextInput({
@@ -37,12 +38,14 @@ function CustomTextInput({
   numberOfLines,
   autoCapitalize,
   multiline,
+  autoFocus,
 }: CustomInputProps): JSX.Element {
   const {theme} = useTheme();
 
   return (
     <View style={styles(theme).container}>
       <TextInput
+        autoFocus={autoFocus}
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
         style={[styles(theme).textInput, style]}

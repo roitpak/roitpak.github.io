@@ -20,3 +20,14 @@ export function formatDate(date: Date) {
 
   return `${month} ${day}, ${year}`;
 }
+
+export function extractVideoId(url: string) {
+  var pattern =
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]+)/;
+  var match = url.match(pattern);
+  if (match) {
+    return match[1].toString();
+  } else {
+    return '';
+  }
+}

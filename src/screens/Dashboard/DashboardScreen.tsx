@@ -88,13 +88,14 @@ function DashboardScreen(): JSX.Element {
       .then(response => {
         return response;
       })
-      .catch(err => console.log(err));
+      .catch(err => openModal({title: err?.message}));
     await getPosts();
     setLoading(false);
   };
 
   return (
     <Wrapper
+      style={styles(theme).mainContainer}
       refreshControl={
         <RefreshControl refreshing={loading} onRefresh={getPosts} />
       }>
@@ -187,6 +188,9 @@ const styles = (theme: Theme) =>
     introMessageStyle: {
       textAlign: 'justify',
       marginBottom: theme.sizes.medium,
+    },
+    mainContainer: {
+      paddingBottom: theme.sizes.extra_extra_large * 2,
     },
   });
 

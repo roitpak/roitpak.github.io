@@ -13,7 +13,9 @@ import {useTheme} from '../../context/theme/useTheme';
 import {useUser} from '../../context/user/useUser';
 import PostStatusButton from '../../components/post/PostStatusButton';
 import Status from '../../components/post/enum/PostStatusEnum';
-import {Post} from '../../appwrite/types/posts';
+import VideoUrlComponent from '../../components/post/VideoUrlComponent';
+import TLDRComponent from '../../components/post/TLDRComponent';
+import strings from '../../constants/strings.json';
 
 function PostContentScreen({route}: any): JSX.Element {
   const [post, setPost] = useState(route.params);
@@ -75,22 +77,44 @@ function PostContentScreen({route}: any): JSX.Element {
         }
       });
   };
-  const onPostStatusChange = async (item: Post, status: Status) => {
+
+  const onPostStatusChange = async (status: Status) => {
     setLoading(true);
     await postService
-      .updatePost(item?.$id ?? '', {...item, status: status})
+      .updatePost(post?.$id ?? '', {...post, status: status})
       .then(response => {
         setPost(response);
       })
-      .catch(err => console.log(err));
+      .catch(err => openModal({title: err?.message}));
+    setLoading(false);
+  };
+
+  const onPostVideoUrlChange = async (url: string) => {
+    setLoading(true);
+    await postService
+      .updatePost(post?.$id ?? '', {...post, videoUrl: url})
+      .then(response => {
+        setPost(response);
+      })
+      .catch(err => openModal({title: err?.message}));
+    setLoading(false);
+  };
+
+  const onPostTLDRUpdate = async (value: string) => {
+    setLoading(true);
+    await postService
+      .updatePost(post?.$id ?? '', {...post, tldr: value})
+      .then(response => {
+        console.log(response);
+        setPost(response);
+      })
+      .catch(err => openModal({title: err?.message}));
     setLoading(false);
   };
 
   return (
     <Wrapper style={styles(theme).container}>
-      <View style={styles(theme).headerContainer}>
-        <CustomText title={post.title} type={'h1'} />
-      </View>
+      <CustomText title={post.title} type={'h1'} />
       {loading && (
         <ActivityIndicator
           style={styles(theme).indicator}
@@ -98,24 +122,28 @@ function PostContentScreen({route}: any): JSX.Element {
           color={theme.colors.text_color}
         />
       )}
-      {post.contents.length === 0 && !newPostData && (
-        <CustomText
-          title={'Looks empty here, start by adding by clicking button below'}
-          type={'p1'}
-        />
-      )}
       {isAdmin && (
         <PostStatusButton
           loading={loading}
-          onChange={(status: Status) => onPostStatusChange(post, status)}
+          onChange={(status: Status) => onPostStatusChange(status)}
           status={post.status ? post.status : Status.pending}
         />
       )}
-      <FlatList
-        data={post.contents}
-        renderItem={({item}) => <PostComponent id={item} />}
-        keyExtractor={(item, index) => index.toString()}
+      <VideoUrlComponent
+        loading={loading}
+        url={post?.videoUrl}
+        onUrlChange={(url: string) => onPostVideoUrlChange(url)}
       />
+      {post.contents.length === 0 && !newPostData && (
+        <CustomText title={strings.startByAdding} type={'p1'} />
+      )}
+      <View style={styles(theme).headerContainer}>
+        <FlatList
+          data={post.contents}
+          renderItem={({item}) => <PostComponent id={item} />}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
       {newPostData && (
         <NewPostComponent
           newPost={newPostData}
@@ -131,6 +159,11 @@ function PostContentScreen({route}: any): JSX.Element {
           onPress={onAdd}
         />
       )}
+      <TLDRComponent
+        loading={loading}
+        onChange={value => onPostTLDRUpdate(value)}
+        content={post?.tldr}
+      />
     </Wrapper>
   );
 }
@@ -140,7 +173,7 @@ const styles = (theme: Theme) =>
       paddingBottom: theme.sizes.extra_extra_large * 2,
     },
     headerContainer: {
-      marginBottom: theme.sizes.extra_extra_large,
+      marginBottom: theme.sizes.medium,
     },
     buttonStyle: {
       alignSelf: 'center',
