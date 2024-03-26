@@ -78,7 +78,9 @@ export default Wrapper;
 const styles = (theme: Theme) =>
   StyleSheet.create({
     scrollContainer: {
-      padding: theme.sizes.extra_extra_large,
+      paddingTop: theme.sizes.medium,
+      paddingHorizontal: theme.sizes.extra_extra_large,
+      paddingBottom: theme.sizes.extra_extra_large,
     },
   });
 

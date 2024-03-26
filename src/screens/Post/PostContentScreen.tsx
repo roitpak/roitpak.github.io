@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {PostContent, Theme} from '../../constants/Types';
 import NewPostComponent from '../../components/post/NewPostComponent';
 import {BUTTON_TYPES, TEXT_POST_TYPE} from '../../constants/Constants';
@@ -16,8 +22,12 @@ import Status from '../../components/post/enum/PostStatusEnum';
 import VideoUrlComponent from '../../components/post/VideoUrlComponent';
 import TLDRComponent from '../../components/post/TLDRComponent';
 import strings from '../../constants/strings.json';
+import Icon from '../../assets/Icon';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 function PostContentScreen({route}: any): JSX.Element {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [post, setPost] = useState(route.params);
   const [newPostData, setNewPostData] = useState<PostContent | null>(null);
   const {isAdmin} = useUser();
@@ -25,6 +35,7 @@ function PostContentScreen({route}: any): JSX.Element {
   const [loading, setLoading] = useState(false);
 
   const {theme} = useTheme();
+
   useEffect(() => {
     setPost(route.params);
   }, [route]);
@@ -114,7 +125,16 @@ function PostContentScreen({route}: any): JSX.Element {
 
   return (
     <Wrapper style={styles(theme).container}>
-      <CustomText title={post.title} type={'h1'} />
+      <View style={styles(theme).titleContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon
+            icon={'arrow-left2'}
+            size={theme.sizes.extra_extra_large}
+            color={theme.colors.text_color}
+          />
+        </TouchableOpacity>
+        <CustomText title={post.title} type={'h1'} />
+      </View>
       {loading && (
         <ActivityIndicator
           style={styles(theme).indicator}
@@ -180,6 +200,10 @@ const styles = (theme: Theme) =>
     },
     indicator: {
       marginTop: theme.sizes.medium,
+    },
+    titleContainer: {
+      marginTop: theme.sizes.small,
+      alignItems: 'flex-start',
     },
   });
 
