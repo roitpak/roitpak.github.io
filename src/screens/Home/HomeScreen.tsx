@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, Linking, Platform, StyleSheet, View} from 'react-native';
+import {
+  Image,
+  Linking,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {dashboardScreen, loginScreen} from '../../constants/Screens';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -30,7 +37,16 @@ function HomeScreen(): JSX.Element {
   return (
     <Wrapper>
       <View style={styles(theme).container}>
-        <CustomText title={strings.name} type="h1" />
+        <View style={styles(theme).titleContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon
+              icon={'arrow-left2'}
+              size={theme.sizes.extra_extra_large}
+              color={theme.colors.text_color}
+            />
+          </TouchableOpacity>
+          <CustomText title={strings.name} type={'h1'} />
+        </View>
         <Icon
           onPress={changeTheme}
           icon={isDarkMode ? 'sun' : 'contrast'}
@@ -158,6 +174,10 @@ const styles = (theme: Theme) =>
     },
     bottomContainer: {
       alignItems: 'center',
+    },
+    titleContainer: {
+      marginTop: theme.sizes.small,
+      alignItems: 'flex-start',
     },
   });
 

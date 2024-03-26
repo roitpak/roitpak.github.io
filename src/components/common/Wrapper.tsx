@@ -65,6 +65,7 @@ const styles = (theme: Theme) =>
   StyleSheet.create({
     scrollContainer: {
       padding: theme.sizes.extra_extra_large,
+      paddingBottom: theme.sizes.extra_extra_large * 8,
       maxWidth: 800,
       alignSelf: 'center',
     },
