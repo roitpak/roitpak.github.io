@@ -26,7 +26,7 @@ import DarkModeButton from '../../components/common/DarkModeButton';
 import DashboardButtonGroup from '../../components/dashboard/DashboardButtonGroup';
 import BlogItem from '../../components/dashboard/BlogItem';
 import Status from '../../components/post/enum/PostStatusEnum';
-import {getGeoLocation} from '../../helpers/functions';
+import {getGeoLocation, getUserUniqueID} from '../../helpers/functions';
 
 function DashboardScreen(): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -58,12 +58,17 @@ function DashboardScreen(): JSX.Element {
     });
   };
   const getGeoLogin = async () => {
-    const response = await getGeoLocation();
-    const prevRecord = await postService.getPrevLoginLocation(
-      response?.data?.geoplugin_request,
-    );
-    if (prevRecord?.documents?.length === 0) {
-      await postService.postLoginLocation(response?.data);
+    const unique = await getUserUniqueID();
+    if (unique) {
+      const response = await getGeoLocation();
+      const prevRecord = await postService.getPrevLoginLocation(unique);
+      if (prevRecord?.documents?.length === 0) {
+        await postService.postLoginLocation({
+          ...response?.data,
+          unique_id: unique,
+          device: Platform.OS,
+        });
+      }
     }
   };
 
@@ -71,7 +76,7 @@ function DashboardScreen(): JSX.Element {
     getGeoLogin();
     getPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdmin]);
+  }, []);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -170,6 +175,7 @@ function DashboardScreen(): JSX.Element {
       {posts &&
         posts.map(item => (
           <BlogItem
+            key={item?.$createdAt}
             loading={loading}
             onPostStatusChange={onPostStatusChange}
             item={item}
