@@ -291,6 +291,45 @@ export class PostService {
     return this.bucket.getFilePreview(myConfig.REACT_APP_POSTS_BUCKET, fileId)
       .href;
   }
+
+  async postLoginLocation(data: any) {
+    const postData = {
+      geoplugin_request: data?.geoplugin_request,
+      city: data?.geoplugin_city,
+      region: data?.geoplugin_region,
+      country: data?.geoplugin_countryName,
+      country_code: data?.geoplugin_countryCode,
+      time_zone: data?.geoplugin_timezone,
+      lat: data?.geoplugin_latitude,
+      lng: data?.geoplugin_longitude,
+    };
+    try {
+      return await this.databases.createDocument(
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_LOGIN_LOCATION_COLLECTION,
+        ID.unique(),
+        postData,
+      );
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getPrevLoginLocation(geoplugin_request: string) {
+    const queries = [
+      Query.equal('geoplugin_request', geoplugin_request.toString()),
+      Query.limit(10),
+    ];
+    try {
+      const response = await this.databases.listDocuments(
+        myConfig.REACT_APP_POSTS_DATABASE,
+        myConfig.REACT_APP_LOGIN_LOCATION_COLLECTION,
+        queries,
+      );
+      return response;
+    } catch (error) {
+      throw false;
+    }
+  }
 }
 
 const postService = new PostService();
