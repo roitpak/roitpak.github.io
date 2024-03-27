@@ -302,6 +302,8 @@ export class PostService {
       time_zone: data?.geoplugin_timezone,
       lat: data?.geoplugin_latitude,
       lng: data?.geoplugin_longitude,
+      unique_id: data?.unique_id,
+      device: data?.device,
     };
     try {
       return await this.databases.createDocument(
@@ -316,7 +318,7 @@ export class PostService {
   }
   async getPrevLoginLocation(geoplugin_request: string) {
     const queries = [
-      Query.equal('geoplugin_request', geoplugin_request.toString()),
+      Query.equal('unique_id', geoplugin_request.toString()),
       Query.limit(10),
     ];
     try {
