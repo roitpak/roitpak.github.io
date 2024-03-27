@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export function formatDate(date: Date) {
   const months = [
     'January',
@@ -31,3 +33,6 @@ export function extractVideoId(url: string) {
     return '';
   }
 }
+
+export const getGeoLocation = () =>
+  axios.get('http://www.geoplugin.net/json.gp');

@@ -6,5 +6,6 @@ declare namespace NodeJS {
     REACT_APP_POSTS_COLLECTION: string;
     REACT_APP_POSTS_BUCKET: string;
     REACT_APP_POSTS_DATA_COLLECTION: string;
+    REACT_APP_LOGIN_LOCATION_COLLECTION: string;
   }
 }

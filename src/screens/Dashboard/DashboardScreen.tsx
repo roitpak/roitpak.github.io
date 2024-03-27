@@ -26,6 +26,7 @@ import DarkModeButton from '../../components/common/DarkModeButton';
 import DashboardButtonGroup from '../../components/dashboard/DashboardButtonGroup';
 import BlogItem from '../../components/dashboard/BlogItem';
 import Status from '../../components/post/enum/PostStatusEnum';
+import {getGeoLocation} from '../../helpers/functions';
 
 function DashboardScreen(): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -56,8 +57,18 @@ function DashboardScreen(): JSX.Element {
       ],
     });
   };
+  const getGeoLogin = async () => {
+    const response = await getGeoLocation();
+    const prevRecord = await postService.getPrevLoginLocation(
+      response?.data?.geoplugin_request,
+    );
+    if (prevRecord?.documents?.length === 0) {
+      await postService.postLoginLocation(response?.data);
+    }
+  };
 
   useEffect(() => {
+    getGeoLogin();
     getPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAdmin]);
