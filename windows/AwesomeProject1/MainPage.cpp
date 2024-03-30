@@ -9,7 +9,7 @@
 using namespace winrt;
 using namespace xaml;
 
-namespace winrt::AwesomeProject1::implementation
+namespace winrt::RohitBlog::implementation
 {
     MainPage::MainPage()
     {

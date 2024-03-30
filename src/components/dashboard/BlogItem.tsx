@@ -48,9 +48,9 @@ const BlogItem = ({item, onPostStatusChange, loading}: AddPostModalProps) => {
         </View>
       )}
       <View style={styles(theme).categoryContainer}>
-        {item?.category.map(item => (
-          <View key={item} style={styles(theme).category}>
-            <CustomText title={item} type="p3" />
+        {item?.category.map(title => (
+          <View key={title} style={styles(theme).category}>
+            <CustomText title={title} type="p3" />
           </View>
         ))}
       </View>
