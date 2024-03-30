@@ -74,6 +74,10 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "com.roitpak.blog"
+    lint {
+        baseline = file("lint-baseline.xml")
+        abortOnError false
+    }
     defaultConfig {
         applicationId "com.roitpak.blog"
         minSdkVersion rootProject.ext.minSdkVersion

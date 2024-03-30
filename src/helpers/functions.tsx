@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {Platform} from 'react-native';
-import { getUniqueId } from 'react-native-device-info';
+import {getUniqueId} from 'react-native-device-info';
 import {v4 as uuidv4} from 'uuid';
 
 export function formatDate(date: Date) {
