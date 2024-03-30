@@ -27,6 +27,7 @@ import DashboardButtonGroup from '../../components/dashboard/DashboardButtonGrou
 import BlogItem from '../../components/dashboard/BlogItem';
 import Status from '../../components/post/enum/PostStatusEnum';
 import {getGeoLocation, getUserUniqueID} from '../../helpers/functions';
+import SplashScreen from 'react-native-splash-screen';
 
 function DashboardScreen(): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -75,8 +76,9 @@ function DashboardScreen(): JSX.Element {
   useEffect(() => {
     getGeoLogin();
     getPosts();
+    Platform.OS !== 'web' && SplashScreen.hide();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAdmin]); //when is admin updated fetch again
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {

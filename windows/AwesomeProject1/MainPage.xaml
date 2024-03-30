@@ -1,8 +1,8 @@
 <Page
-    x:Class="AwesomeProject1.MainPage"
+    x:Class="RohitBlog.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:AwesomeProject1"
+    xmlns:local="using:RohitBlog"
     xmlns:react="using:Microsoft.ReactNative"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,7 +10,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <react:ReactRootView 
         x:Name="ReactRootView"
-        ComponentName="AwesomeProject1"
+        ComponentName="RohitBlog"
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
         MinHeight="400"/>
 </Page>

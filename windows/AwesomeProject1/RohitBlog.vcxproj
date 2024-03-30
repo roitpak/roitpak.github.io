@@ -7,8 +7,8 @@
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
     <MinimalCoreWin>true</MinimalCoreWin>
     <ProjectGuid>{ac925ebc-7414-45f7-b1a5-e12a56615808}</ProjectGuid>
-    <ProjectName>AwesomeProject1</ProjectName>
-    <RootNamespace>AwesomeProject1</RootNamespace>
+    <ProjectName>RohitBlog</ProjectName>
+    <RootNamespace>RohitBlog</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>

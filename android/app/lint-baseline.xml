@@ -51,15 +51,15 @@
         errorLine1="      ReactContext reactContext = reactInstanceManager.getCurrentReactContext();"
         errorLine2="                                                       ~~~~~~~~~~~~~~~~~~~~~~">
         <location
-            file="src/debug/java/com/awesomeproject1/ReactNativeFlipper.java"
+            file="src/debug/java/com/RohitBlog/ReactNativeFlipper.java"
             line="54"
             column="56"/>
     </issue>
 
     <issue
         id="Typos"
-        message="Did you mean &quot;AwesomeProject!&quot; instead of &quot;AwesomeProject1&quot;?"
-        errorLine1="    &lt;string name=&quot;app_name&quot;>AwesomeProject1&lt;/string>"
+        message="Did you mean &quot;AwesomeProject!&quot; instead of &quot;RohitBlog&quot;?"
+        errorLine1="    &lt;string name=&quot;app_name&quot;>RohitBlog&lt;/string>"
         errorLine2="                            ^">
         <location
             file="src/main/res/values/strings.xml"

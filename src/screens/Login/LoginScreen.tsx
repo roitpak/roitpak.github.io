@@ -30,6 +30,7 @@ function LoginScreen(): JSX.Element {
   const {theme} = useTheme();
 
   useEffect(() => {
+    // eslint-disable-next-line no-useless-escape
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     const passwordRegex = signupMode
       ? /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
