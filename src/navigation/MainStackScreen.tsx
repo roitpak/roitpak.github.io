@@ -16,6 +16,7 @@ import PostInfoScreen from '../screens/Post/PostContentScreen';
 import {headerHidden} from './navigationsoptions';
 import PrivacyScreen from '../screens/Privacy/PrivacyScreen';
 import ContactScreen from '../screens/Contact/ContactScreen';
+import strings from '../constants/strings.json';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,7 +34,12 @@ function MainStackScreen(): JSX.Element {
     },
   };
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer
+      documentTitle={{
+        formatter: (options, route) =>
+          `${options?.title ?? route?.name} - ${strings.name}`,
+      }}
+      linking={linking}>
       <Stack.Navigator
         screenOptions={headerHidden}
         initialRouteName={dashboardScreen}>
