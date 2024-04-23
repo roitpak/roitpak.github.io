@@ -55,3 +55,23 @@ export const getUserUniqueID = async (): Promise<string> => {
     return id;
   }
 };
+
+export function getValueFromUrl(url: string | null) {
+  if (!url) {
+    return null;
+  }
+  // Regular expression to match URLs with "/<value>" format
+  const regex = /\/([a-zA-Z0-9]+)$/;
+
+  // Executing the regular expression on the URL
+  const match = regex.exec(url);
+
+  // Check if the URL matches the pattern
+  if (match) {
+    // Extracting the captured ID
+    return match[1];
+  }
+
+  // Return null if the URL doesn't match the pattern
+  return null;
+}
