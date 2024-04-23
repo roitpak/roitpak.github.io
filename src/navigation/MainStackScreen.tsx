@@ -22,7 +22,7 @@ const Stack = createNativeStackNavigator();
 
 function MainStackScreen(): JSX.Element {
   const linking = {
-    prefixes: ['http://localhost:19006/', 'mychat://'],
+    prefixes: ['http://localhost:3000/', 'http://rohitpakhrin.com.np/'],
     config: {
       screens: {
         dashboardScreen: '',

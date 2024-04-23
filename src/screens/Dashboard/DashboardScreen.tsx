@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  Linking,
   Platform,
   RefreshControl,
   StyleSheet,
@@ -8,7 +9,7 @@ import {
 } from 'react-native';
 import {useUser} from '../../context/user/useUser';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
-import {loginScreen} from '../../constants/Screens';
+import {addPostScreen, loginScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ADMIN_LABEL} from '../../constants/Constants';
 import {Post} from '../../appwrite/types/posts';
@@ -26,7 +27,11 @@ import DarkModeButton from '../../components/common/DarkModeButton';
 import DashboardButtonGroup from '../../components/dashboard/DashboardButtonGroup';
 import BlogItem from '../../components/dashboard/BlogItem';
 import Status from '../../components/post/enum/PostStatusEnum';
-import {getGeoLocation, getUserUniqueID} from '../../helpers/functions';
+import {
+  getGeoLocation,
+  getUserUniqueID,
+  getValueFromUrl,
+} from '../../helpers/functions';
 import SplashScreen from 'react-native-splash-screen';
 
 function DashboardScreen(): JSX.Element {
@@ -81,6 +86,21 @@ function DashboardScreen(): JSX.Element {
   }, [isAdmin]); //when is admin updated fetch again
 
   React.useEffect(() => {
+    Linking.getInitialURL().then(async (url: string | null) => {
+      const id = getValueFromUrl(url);
+      if (id) {
+        await postService
+          .getPost(id)
+          .then(response => {
+            navigation.navigate(addPostScreen, response);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        //http://localhost:3000/66098fb547f3dad78635
+      }
+    });
+
     const unsubscribe = navigation.addListener('focus', () => {
       getPosts();
     });
