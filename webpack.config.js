@@ -76,6 +76,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'index.html'),
       title: 'Rohit Blog',
+      favicon: 'favicon.ico',
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({

@@ -98,6 +98,7 @@ function DashboardScreen(): JSX.Element {
             console.log(err);
           });
         //http://localhost:3000/66098fb547f3dad78635
+        //http://rohitpakhrin.com.np/66098fb547f3dad78635
       }
     });
 
