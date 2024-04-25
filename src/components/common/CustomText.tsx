@@ -26,7 +26,12 @@ function CustomText({
     <Text
       numberOfLines={numberOfLines}
       onPress={onPress}
-      style={[styles(theme)[type], style, bold && styles(theme).bold]}>
+      style={[
+        styles(theme)[type],
+        style,
+        bold && styles(theme).bold,
+        styles(theme).text,
+      ]}>
       {title}
     </Text>
   );
@@ -66,5 +71,10 @@ const styles = (theme: Theme) =>
     },
     bold: {
       fontWeight: 'bold',
+    },
+    text: {
+      lineHeight: 24,
+      fontWeight: '200',
+      textAlign: 'justify',
     },
   });
