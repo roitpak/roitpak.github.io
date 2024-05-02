@@ -9,7 +9,11 @@ import {
 } from 'react-native';
 import {useUser} from '../../context/user/useUser';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
-import {addPostScreen, loginScreen} from '../../constants/Screens';
+import {
+  addPostScreen,
+  loginScreen,
+  privacyScreen,
+} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ADMIN_LABEL} from '../../constants/Constants';
 import {Post} from '../../appwrite/types/posts';
@@ -88,6 +92,9 @@ function DashboardScreen(): JSX.Element {
   React.useEffect(() => {
     Linking.getInitialURL().then(async (url: string | null) => {
       const id = getValueFromUrl(url);
+      if (id === 'PrivacyScreen') {
+        navigation.navigate(privacyScreen);
+      }
       if (id) {
         await postService
           .getPost(id)
