@@ -192,7 +192,7 @@ function DashboardScreen(): JSX.Element {
           <Button title={'Add Post'} onPress={addPost} />
         </View>
       )}
-      {posts.length === 0 && (
+      {posts.length === 0 && !loading && (
         <CustomText title={strings.noContent} type={'h2'} />
       )}
       {loading && (
