@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {
   ActivityIndicator,
   DimensionValue,
@@ -18,7 +18,7 @@ interface ButtonProps {
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
-  iconRight?: string;
+  iconRight?: ReactNode;
   buttonStyle?: ViewStyle;
   textStyle?: TextStyle;
   type?: BottomTypes;
@@ -86,11 +86,11 @@ function Button({
             }
           />
         ) : (
-          <View>
+          <View style={styles(theme).contentStyle}>
             {title && (
               <Text style={[returnStyle().text, textStyle]}>{title}</Text>
             )}
-            {iconRight && <Text>{iconRight}</Text>}
+            {iconRight}
           </View>
         )}
       </>
@@ -147,5 +147,9 @@ const styles = (theme: Theme, disabled?: boolean) =>
       color: disabled
         ? theme.colors.button_disabled_text
         : theme.colors.button_text,
+    },
+    contentStyle: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   });

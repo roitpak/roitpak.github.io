@@ -25,6 +25,7 @@ import strings from '../../constants/strings.json';
 import Icon from '../../assets/Icon';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 function PostContentScreen({route}: any): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -123,6 +124,11 @@ function PostContentScreen({route}: any): JSX.Element {
     setLoading(false);
   };
 
+  const onPressShare = () => {
+    Clipboard.setString('https://www.rohitpakhrin.com.np/' + post.$id);
+    openModal({title: 'Link Copied, You can share it now.'});
+  };
+
   return (
     <Wrapper style={styles(theme).container}>
       <View style={styles(theme).titleContainer}>
@@ -183,6 +189,19 @@ function PostContentScreen({route}: any): JSX.Element {
         loading={loading}
         onChange={value => onPostTLDRUpdate(value)}
         content={post?.tldr}
+      />
+      <Button
+        buttonStyle={styles(theme).buttonStyle}
+        title="Share"
+        type={BUTTON_TYPES.filled}
+        onPress={onPressShare}
+        iconRight={
+          <Icon
+            icon="share2"
+            size={theme.sizes.large}
+            color={theme.colors.text_color}
+          />
+        }
       />
     </Wrapper>
   );
