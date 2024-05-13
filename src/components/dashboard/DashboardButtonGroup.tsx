@@ -5,11 +5,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Theme} from '../../constants/Types';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {
-  contactScreen,
-  homeScreen,
-  privacyScreen,
-} from '../../constants/Screens';
+import {homeScreen, privacyScreen} from '../../constants/Screens';
 
 const DashboardButtonGroup = () => {
   const {theme} = useTheme();
@@ -23,9 +19,9 @@ const DashboardButtonGroup = () => {
     navigation.navigate(privacyScreen);
   };
 
-  const goToContactScreen = () => {
-    navigation.navigate(contactScreen);
-  };
+  // const goToContactScreen = () => {
+  //   navigation.navigate(contactScreen);
+  // };
 
   return (
     <View style={styles(theme).container}>
@@ -36,12 +32,12 @@ const DashboardButtonGroup = () => {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={goToPrivacyScreen}
-        style={[styles(theme).items, styles(theme).borderRight]}>
+        style={[styles(theme).items]}>
         <CustomText style={styles(theme).text} type="p1" title="Privacy" />
       </TouchableOpacity>
-      <TouchableOpacity onPress={goToContactScreen} style={styles(theme).items}>
+      {/* <TouchableOpacity onPress={goToContactScreen} style={styles(theme).items}>
         <CustomText style={styles(theme).text} type="p1" title="Contact" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
