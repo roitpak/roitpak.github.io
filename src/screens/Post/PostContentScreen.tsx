@@ -26,6 +26,7 @@ import Icon from '../../assets/Icon';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Clipboard from '@react-native-clipboard/clipboard';
+import GithubLink from '../../components/post/GithubLink';
 
 function PostContentScreen({route}: any): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -38,7 +39,9 @@ function PostContentScreen({route}: any): JSX.Element {
   const {theme} = useTheme();
 
   useEffect(() => {
+    console.log(post.githubUrl);
     setPost(route.params);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route]);
 
   const onChange = (value: PostContent) => {
@@ -124,6 +127,18 @@ function PostContentScreen({route}: any): JSX.Element {
     setLoading(false);
   };
 
+  const onGithubURLUpdate = async (value: string) => {
+    setLoading(true);
+    await postService
+      .updatePost(post?.$id ?? '', {...post, githubUrl: value})
+      .then(response => {
+        console.log(response);
+        setPost(response);
+      })
+      .catch(err => openModal({title: err?.message}));
+    setLoading(false);
+  };
+
   const onPressShare = () => {
     Clipboard.setString('https://www.rohitpakhrin.com.np/' + post.$id);
     openModal({title: 'Link Copied, You can share it now.'});
@@ -155,6 +170,11 @@ function PostContentScreen({route}: any): JSX.Element {
           status={post.status ? post.status : Status.pending}
         />
       )}
+      <GithubLink
+        loading={loading}
+        onChange={newUrl => onGithubURLUpdate(newUrl)}
+        url={post.githubUrl}
+      />
       <VideoUrlComponent
         loading={loading}
         url={post?.videoUrl}
