@@ -33,7 +33,6 @@ function PrivacyScreen(): JSX.Element {
 const styles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      padding: theme.sizes.large,
       marginBottom: theme.sizes.extra_extra_large * 5,
       alignItems: 'flex-start',
     },

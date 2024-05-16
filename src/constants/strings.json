@@ -22,6 +22,7 @@
     "addPost": "Add post",
     "addCategory": "Add category",
     "noContent": "Oops! It seems we're experiencing a moment of tranquility here. But fret not, exciting content is on its way. Thank you for your patience and continued support!",
-    "startByAdding": "Looks empty here, start adding by clicking button below",
-    "share": "Share"
+    "startByAdding": "Looks empty here, start adding by clicking button below. Remember you add youtube link, github link and even TLDR for guest to quick read your post.",
+    "share": "Share",
+    "categorySubtitle": "Type category in the text input below and press Add category button."
 }

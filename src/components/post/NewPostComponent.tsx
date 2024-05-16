@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, Platform, StyleSheet, View} from 'react-native';
 import {PostContent, Theme} from '../../constants/Types';
 import {
   CODE_POST_TYPE,
@@ -50,12 +50,14 @@ function NewPostComponent({
 
   return (
     <View style={styles(theme).container}>
+      <CustomText title={'Title:'} type="h2" />
       <CustomTextInput
         placeholder="title"
         value={newPost.title}
         onChangeText={value => onChangeValue(value, POST_CONTENT_KEYS.title)}
       />
       <View style={styles(theme).contentContainer}>
+        <CustomText title={'Subtitle:'} type="h2" />
         <CustomTextInput
           placeholder="subtitle"
           value={newPost.subtitle}
@@ -99,6 +101,7 @@ function NewPostComponent({
           textSelected={newPost.content_type === TEXT_POST_TYPE}
         />
       </View>
+      <CustomText title={'Content:'} type="h2" />
       <CustomTextInput
         multiline
         placeholder="Content"
@@ -106,7 +109,14 @@ function NewPostComponent({
         value={newPost.content}
         onChangeText={value => onChangeValue(value, POST_CONTENT_KEYS.content)}
       />
-      <Button loading={loading} title={strings.savePost} onPress={onSave} />
+      <View style={styles(theme).saveButton}>
+        <Button
+          disabled={newPost?.title?.length === 0}
+          loading={loading}
+          title={strings.savePost}
+          onPress={onSave}
+        />
+      </View>
     </View>
   );
 }
@@ -117,7 +127,10 @@ const styles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       marginVertical: theme.sizes.large,
-      alignItems: 'center',
+      borderTopWidth: 2,
+      borderBottomWidth: 2,
+      paddingVertical: theme.sizes.large,
+      borderColor: theme.colors.button_border,
     },
     selectOne: {
       flexDirection: 'column',
@@ -128,6 +141,8 @@ const styles = (theme: Theme) =>
     },
     contentInput: {
       marginVertical: theme.sizes.large,
+      height: Platform.OS === 'web' ? 100 : null,
+      maxHeight: 300,
     },
     contentContainer: {
       marginTop: theme.sizes.large,
@@ -145,5 +160,8 @@ const styles = (theme: Theme) =>
     },
     imageContainer: {
       marginVertical: theme.sizes.large,
+    },
+    saveButton: {
+      alignItems: 'center',
     },
   });

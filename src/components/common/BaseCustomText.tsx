@@ -28,9 +28,9 @@ function BaseCustomText({
       onPress={onPress}
       style={[
         styles(theme)[type],
-        style,
         bold && styles(theme).bold,
         styles(theme).text,
+        style,
       ]}>
       {title}
     </Text>
