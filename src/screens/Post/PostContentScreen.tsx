@@ -35,6 +35,7 @@ function PostContentScreen({route}: any): JSX.Element {
   const {isAdmin} = useUser();
 
   const [loading, setLoading] = useState(false);
+  const [updatingPost, setUpdatingPost] = useState(false);
 
   const {theme} = useTheme();
 
@@ -62,13 +63,16 @@ function PostContentScreen({route}: any): JSX.Element {
 
   const onSave = async () => {
     if (newPostData) {
+      setUpdatingPost(true);
       await postService
         .createPostContent(newPostData, post)
         .then(() => {
+          setUpdatingPost(false);
           getPost();
           setNewPostData(null);
         })
         .catch(err => {
+          setUpdatingPost(false);
           if (err instanceof Error) {
             openModal({title: err.message});
           } else {
@@ -154,7 +158,11 @@ function PostContentScreen({route}: any): JSX.Element {
             color={theme.colors.text_color}
           />
         </TouchableOpacity>
-        <CustomText title={post.title} type={'h1'} />
+        <CustomText
+          style={styles(theme).postTitle}
+          title={post.title}
+          type={'h1'}
+        />
       </View>
       {loading && (
         <ActivityIndicator
@@ -180,7 +188,7 @@ function PostContentScreen({route}: any): JSX.Element {
         url={post?.videoUrl}
         onUrlChange={(url: string) => onPostVideoUrlChange(url)}
       />
-      {post.contents.length === 0 && !newPostData && (
+      {post.contents.length === 0 && (
         <CustomText title={strings.startByAdding} type={'p1'} />
       )}
       <View style={styles(theme).headerContainer}>
@@ -192,6 +200,7 @@ function PostContentScreen({route}: any): JSX.Element {
       </View>
       {newPostData && (
         <NewPostComponent
+          loading={updatingPost}
           newPost={newPostData}
           onChange={onChange}
           onSave={onSave}
@@ -233,6 +242,9 @@ const styles = (theme: Theme) =>
     },
     headerContainer: {
       marginBottom: theme.sizes.medium,
+    },
+    postTitle: {
+      marginVertical: theme.sizes.large,
     },
     buttonStyle: {
       alignSelf: 'center',

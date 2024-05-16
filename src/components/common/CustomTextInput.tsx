@@ -3,6 +3,7 @@ import {
   DimensionValue,
   KeyboardType,
   KeyboardTypeIOS,
+  Platform,
   StyleProp,
   StyleSheet,
   TextInput,
@@ -45,6 +46,7 @@ function CustomTextInput({
   return (
     <View style={styles(theme).container}>
       <TextInput
+        placeholderTextColor={theme.colors.button_disabled_text}
         autoFocus={autoFocus}
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
@@ -70,7 +72,10 @@ const styles = (theme: Theme) =>
     container: {
       flexDirection: 'row',
       justifyContent: 'flex-start',
-      width: theme.sizes.input_width as DimensionValue,
+      width:
+        Platform.OS === 'web'
+          ? null
+          : (theme.sizes.input_width as DimensionValue),
     },
     textInput: {
       flex: 1,

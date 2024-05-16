@@ -89,6 +89,7 @@ const styles = (theme: Theme) =>
   StyleSheet.create({
     content: {
       flexDirection: 'column',
+      marginVertical: theme.sizes.small,
     },
     mainContainer: {
       flexDirection: 'row',
