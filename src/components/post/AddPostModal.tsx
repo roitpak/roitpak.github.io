@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   Modal,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -33,11 +34,13 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
   const [postTitle, setPostTitle] = useState('');
   const [category, setCategory] = useState<string[]>([]);
   const [tempCategory, setTempCategory] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const {user} = useUser();
   const {openModal} = useModal();
   const {theme} = useTheme();
   const addPost = async () => {
+    setLoading(true);
     const data: Post = {
       title: postTitle.toString(),
       category: category,
@@ -47,12 +50,14 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
     await postService
       .createPost(data)
       .then(response => {
+        setLoading(false);
         close();
         if (response) {
           navigation.navigate(addPostScreen, response);
         }
       })
       .catch(err => {
+        setLoading(false);
         close();
         if (err instanceof Error) {
           openModal({title: err.message});
@@ -86,15 +91,17 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
             </View>
             <CustomTextInput
               multiline
-              style={styles(theme).contentContainer}
+              style={styles(theme).titleContainer}
               placeholder={'Title'}
               value={postTitle}
               onChangeText={value => setPostTitle(value)}
             />
             <View style={styles(theme).contentContainer}>
-              <CustomText title={'Category'} type={'p2'} />
+              <CustomText title={'Category'} type={'h2'} />
+              <CustomText title={strings.categorySubtitle} type={'p2'} />
               <View>
                 <CustomTextInput
+                  markAsRequired
                   style={styles(theme).contentContainer}
                   value={tempCategory}
                   onChangeText={value => setTempCategory(value)}
@@ -133,7 +140,12 @@ function AddPostModal({showAddPost, close}: AddPostModalProps): JSX.Element {
               )}
             </View>
             <View style={styles(theme).contentContainer}>
-              <Button title={'Add post'} onPress={addPost} />
+              <Button
+                disabled={postTitle.length === 0}
+                loading={loading}
+                title={'Add post'}
+                onPress={addPost}
+              />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -158,6 +170,11 @@ const styles = (theme: Theme) =>
     },
     contentContainer: {
       marginTop: theme.sizes.medium,
+    },
+    titleContainer: {
+      marginTop: theme.sizes.medium,
+      height: Platform.OS === 'web' ? 100 : null,
+      maxHeight: 300,
     },
     categoryContainer: {
       flexDirection: 'row',

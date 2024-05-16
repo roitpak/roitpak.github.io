@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import {useTheme} from '../../context/theme/useTheme';
 import {Theme} from '../../constants/Types';
 import CustomText from '../common/CustomText';
@@ -43,6 +43,7 @@ const TLDRComponent = ({onChange, content, loading}: TLDRComponentProps) => {
       </View>
       {editMode ? (
         <CustomTextInput
+          style={styles(theme).tldrInput}
           autoFocus
           multiline
           placeholder="Too Long Did'nt Read"
@@ -50,7 +51,11 @@ const TLDRComponent = ({onChange, content, loading}: TLDRComponentProps) => {
           onChangeText={value => setNewTldr(value)}
         />
       ) : (
-        <CustomText title={content} type={'h2'} />
+        <CustomText
+          style={styles(theme).tldrText}
+          title={content}
+          type={'p2'}
+        />
       )}
       {editMode && isAdmin && (
         <>
@@ -76,11 +81,21 @@ const TLDRComponent = ({onChange, content, loading}: TLDRComponentProps) => {
 const styles = (theme: Theme) =>
   StyleSheet.create({
     tldrContent: {
-      padding: theme.sizes.small,
-      marginVertical: theme.sizes.medium,
-      borderWidth: 1,
+      padding: theme.sizes.extra_small,
+      marginVertical: theme.sizes.extra_extra_large,
+      // borderWidth: 1,
       borderRadius: theme.sizes.border_radius,
-      borderColor: theme.colors.button_border,
+      // borderColor: theme.colors.button_border,
+      backgroundColor: theme.colors.background_color,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+
+      elevation: 5,
     },
     topTitleContainer: {
       marginBottom: theme.sizes.small,
@@ -90,9 +105,17 @@ const styles = (theme: Theme) =>
     },
     buttonStyle: {
       marginTop: theme.sizes.small,
+      alignSelf: 'center',
     },
     textStyle: {
       color: theme.colors.negative,
+    },
+    tldrInput: {
+      height: Platform.OS === 'web' ? 300 : null,
+      maxHeight: 400,
+    },
+    tldrText: {
+      lineHeight: 17,
     },
   });
 

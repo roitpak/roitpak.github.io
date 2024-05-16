@@ -109,7 +109,7 @@ const styles = (theme: Theme, disabled?: boolean) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: disabled
-        ? theme.colors.button_text_filled
+        ? theme.colors.button_disabled
         : theme.colors.button_background,
     },
     outlinedStyleContainer: {
