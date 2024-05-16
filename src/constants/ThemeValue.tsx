@@ -51,7 +51,7 @@ export const DarkTheme: Theme = {
     button_background: '#3d9bff',
     button_border: '#3d9bff',
     button_disabled: '#696969',
-    button_disabled_text: '#696969',
+    button_disabled_text: '#424242',
     links: '#6c757d',
     accent_color: '#28a745',
     gradient_colors: ['#424242', '#3b3a3a', '#2E2E2E'],

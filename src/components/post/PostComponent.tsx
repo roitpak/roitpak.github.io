@@ -93,19 +93,21 @@ function PostComponent({id}: NewPostComponentProps): JSX.Element {
           />
         )}
       </View>
-      <View style={styles(theme).contentContainer}>
-        <CustomText title={postData?.subtitle} type={'h2'} />
-      </View>
-      <View style={styles(theme).contentContainerImage}>
-        {image && (
+      {postData?.subtitle && (
+        <View style={styles(theme).contentContainer}>
+          <CustomText title={postData?.subtitle} type={'h2'} />
+        </View>
+      )}
+      {image && (
+        <View style={styles(theme).contentContainerImage}>
           <Image
             style={styles(theme).image}
             source={{
               uri: image,
             }}
           />
-        )}
-      </View>
+        </View>
+      )}
       <View style={styles(theme).contentContainer}>
         <CustomText title={postData?.content} type={'p1'} />
       </View>
@@ -118,16 +120,25 @@ export default PostComponent;
 const styles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      marginBottom: theme.sizes.small,
+      marginVertical: theme.sizes.extra_large,
     },
     image: {
       height: 300,
       width: Dimensions.windowWidth * 0.8,
       resizeMode: 'contain',
       alignSelf: 'center',
+      backgroundColor: theme.colors.background_color,
+      borderRadius: theme.sizes.border_radius,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
     },
     contentContainerTitle: {
-      marginBottom: theme.sizes.extra_small,
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
