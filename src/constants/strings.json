@@ -24,5 +24,7 @@
     "noContent": "Oops! It seems we're experiencing a moment of tranquility here. But fret not, exciting content is on its way. Thank you for your patience and continued support!",
     "startByAdding": "Looks empty here, start adding by clicking button below. Remember you add youtube link, github link and even TLDR for guest to quick read your post.",
     "share": "Share",
-    "categorySubtitle": "Type category in the text input below and press Add category button."
+    "categorySubtitle": "Type category in the text input below and press Add category button.",
+    "withAccount": "With a registered account you will be able to interact with the posts and save them for later. With it you can personalize your posts. \n Also you can subscribe to our newsletter.",
+    "passwordValidation": "At least 1 uppercase, 1 lower case, 1 numeric and minimum 8 characters."
 }

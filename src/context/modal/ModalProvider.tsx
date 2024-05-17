@@ -5,7 +5,6 @@ import {
   Modal,
   Pressable,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -13,6 +12,7 @@ import {useTheme} from '../theme/useTheme';
 import {Theme} from '../../constants/Types';
 import Button from '../../components/common/Button';
 import {BUTTON_TYPES} from '../../constants/Constants';
+import CustomText from '../../components/common/CustomText';
 
 interface ModalProviderProps {
   children: ReactNode;
@@ -46,11 +46,11 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({children}) => {
           <Pressable>
             <View style={styles(theme).modalContainer}>
               <View style={styles(theme).textContainer}>
-                <Text style={styles(theme).titleStyle}>{modalProps.title}</Text>
+                <CustomText title={modalProps.title + ''} type="h2" />
                 {modalProps?.subTitle && (
-                  <Text style={styles(theme).subTitleStyle}>
-                    {modalProps?.subTitle}
-                  </Text>
+                  <View style={styles(theme).subTitleStyle}>
+                    <CustomText title={modalProps?.subTitle + ''} type="p1" />
+                  </View>
                 )}
               </View>
               {modalProps && modalProps?.buttons && (
@@ -87,9 +87,17 @@ const styles = (theme: Theme) =>
       justifyContent: 'center',
       textAlign: 'center',
       borderRadius: theme.sizes.border_radius,
-      borderColor: theme.colors.button_border,
-      borderWidth: 1,
+      // borderWidth: 1,
       maxWidth: '80%',
+      alignSelf: 'center',
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
     },
     titleStyle: {
       fontSize: theme.sizes.large,
@@ -97,9 +105,6 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
     },
     subTitleStyle: {
-      fontSize: theme.sizes.medium,
-      color: theme.colors.text_color,
-      textAlign: 'center',
       marginTop: theme.sizes.small,
     },
     buttonContainer: {
@@ -109,8 +114,8 @@ const styles = (theme: Theme) =>
       alignItems: 'center',
     },
     textContainer: {
-      padding: theme.sizes.large,
-      paddingHorizontal: theme.sizes.extra_extra_large,
+      padding: theme.sizes.medium,
+      paddingHorizontal: theme.sizes.medium,
     },
     button: {},
   });

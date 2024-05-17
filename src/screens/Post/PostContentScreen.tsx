@@ -235,7 +235,7 @@ function PostContentScreen({route}: any): JSX.Element {
           <Icon
             icon="share2"
             size={theme.sizes.large}
-            color={theme.colors.text_color}
+            color={theme.colors.button_text_filled}
           />
         }
       />

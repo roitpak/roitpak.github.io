@@ -89,7 +89,7 @@ const styles = (theme: Theme) =>
     },
     textStyle: {
       position: 'absolute',
-      top: -5,
-      right: -5,
+      top: -7,
+      right: -7,
     },
   });
