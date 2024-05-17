@@ -173,24 +173,26 @@ export class PostService {
     let postData = {
       title: post?.title,
       subtitle: post?.subtitle,
-      image_id: null,
+      image_id: post.image_id ? post.image_id : null,
       content: post?.content,
       content_type: post?.content_type,
     };
-    // if image is deleted, remove from server
-    if (!post?.image_id) {
+    // if image is deleted or new uploaded, remove from server
+    if (!post?.image_id || post?.image) {
       const response = await this.getPostContentData(slug);
       if (response?.image_id) {
-        post?.image_id && (await this.deleteFile(post?.image_id));
+        try {
+          await this.deleteFile(response?.image_id);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
     // If there is image upload it
     if (post?.image) {
-      //if there is new Image delete last one
-      post?.image_id && (await this.deleteFile(post?.image_id));
       await this.uploadFile(post.image)
-        .then((response: any) => {
-          postData.image_id = response.$id;
+        .then((imageResponse: any) => {
+          postData.image_id = imageResponse.$id;
         })
         .catch(err => {
           throw err;

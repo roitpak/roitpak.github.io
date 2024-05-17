@@ -41,6 +41,10 @@ function VideoUrlComponent({
     onUrlChange(newUrl);
   };
 
+  if (!isAdmin && !url) {
+    return <></>;
+  }
+
   return (
     <View style={styles(theme).container}>
       <View style={styles(theme).topContainer}>
