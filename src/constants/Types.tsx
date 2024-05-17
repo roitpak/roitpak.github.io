@@ -83,7 +83,7 @@ export interface PostContent {
   title: string;
   subtitle: string;
   content_type: 'code' | 'text';
-  image_id?: string;
+  image_id?: string | null;
   image?: File | Asset | null | undefined;
   content: string;
   postID: string;

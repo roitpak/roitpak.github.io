@@ -1,6 +1,6 @@
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {dashboardScreen} from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {styles} from './styles';
@@ -13,6 +13,8 @@ import {BUTTON_TYPES} from '../../constants/Constants';
 import Wrapper from '../../components/common/Wrapper';
 import CustomTextInput from '../../components/common/CustomTextInput';
 import {useTheme} from '../../context/theme/useTheme';
+import strings from '../../constants/StringsIndex';
+import Icon from '../../assets/Icon';
 
 function LoginScreen(): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -60,9 +62,9 @@ function LoginScreen(): JSX.Element {
       })
       .catch(err => {
         if (err instanceof Error) {
-          openModal({title: err.message});
+          openModal({title: 'Sign in', subTitle: err.message});
         } else {
-          openModal({title: 'Unknown error occurred'});
+          openModal({title: 'Sign in', subTitle: 'Unknown error occurred'});
         }
       });
     setLoading(false);
@@ -84,9 +86,9 @@ function LoginScreen(): JSX.Element {
       .catch(err => {
         console.log(err);
         if (err instanceof Error) {
-          openModal({title: err.message});
+          openModal({title: 'Signup', subTitle: err.message});
         } else {
-          openModal({title: 'Unknown error occurred'});
+          openModal({title: 'Signup', subTitle: 'Unknown error occurred'});
         }
       });
     setLoading(false);
@@ -94,8 +96,27 @@ function LoginScreen(): JSX.Element {
 
   return (
     <Wrapper>
-      <CustomText type="h1" title={signupMode ? 'Signup' : 'Login'} />
-      <View style={styles(theme).sectionContainer}>
+      <View style={styles(theme).titleContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon
+            icon={'arrow-left2'}
+            size={theme.sizes.extra_extra_large}
+            color={theme.colors.text_color}
+          />
+        </TouchableOpacity>
+        <CustomText type="h1" title={signupMode ? 'Signup' : 'Login'} />
+      </View>
+      {signupMode && (
+        <View style={styles(theme).inputContainer}>
+          <CustomTextInput
+            markAsRequired
+            placeholder="Name"
+            value={name}
+            onChangeText={value => setName(value)}
+          />
+        </View>
+      )}
+      <View style={styles(theme).inputContainer}>
         <CustomTextInput
           markAsRequired
           placeholder="Email"
@@ -110,36 +131,38 @@ function LoginScreen(): JSX.Element {
             onChangeText={value => setPasswrod(value)}
             secureTextEntry
           />
+          <CustomText type="p3" bold title={strings.passwordValidation} />
         </View>
-        {signupMode && (
-          <CustomTextInput
-            markAsRequired
-            placeholder="Name"
-            value={name}
-            onChangeText={value => setName(value)}
+        <View style={styles(theme).loginContainer}>
+          <View style={styles(theme).signupTextContainer}>
+            <CustomText
+              type="p2"
+              title={
+                signupMode
+                  ? 'Already have an account?'
+                  : 'Dont have an account?'
+              }
+            />
+            <CustomText
+              onPress={() => setSignupMode(!signupMode)}
+              type="p1"
+              bold
+              title={signupMode ? ' Sign in' : ' Signup'}
+            />
+          </View>
+          <Button
+            loading={loading}
+            type={BUTTON_TYPES.filled}
+            disabled={!validated}
+            title={signupMode ? 'Sign up' : 'Login'}
+            onPress={signupMode ? onPressSignup : onPressLogin}
           />
-        )}
-        <View style={styles(theme).signupTextContainer}>
           <CustomText
+            style={styles(theme).bottomText}
             type="p2"
-            title={
-              signupMode ? 'Already have an account?' : 'Dont have an account?'
-            }
-          />
-          <CustomText
-            onPress={() => setSignupMode(!signupMode)}
-            type="p2"
-            bold
-            title={signupMode ? ' Sign in' : ' Signup'}
+            title={strings.withAccount}
           />
         </View>
-        <Button
-          loading={loading}
-          type={BUTTON_TYPES.filled}
-          disabled={!validated}
-          title={signupMode ? 'Sign up' : 'Login'}
-          onPress={signupMode ? onPressSignup : onPressLogin}
-        />
       </View>
     </Wrapper>
   );

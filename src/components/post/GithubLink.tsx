@@ -35,6 +35,10 @@ export default function GithubLink({url, onChange, loading}: GithubLinkProps) {
     }
   };
 
+  if (!isAdmin && !url) {
+    return null;
+  }
+
   return (
     <View style={styles(theme).content}>
       <View style={styles(theme).mainContainer}>

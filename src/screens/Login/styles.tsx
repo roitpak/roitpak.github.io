@@ -3,6 +3,10 @@ import {Theme} from '../../constants/Types';
 
 export const styles = (theme: Theme) =>
   StyleSheet.create({
+    titleContainer: {
+      marginTop: theme.sizes.small,
+      alignItems: 'flex-start',
+    },
     sectionContainer: {
       marginTop: theme.sizes.large,
     },
@@ -21,6 +25,7 @@ export const styles = (theme: Theme) =>
     signupTextContainer: {
       flexDirection: 'row',
       marginVertical: theme.sizes.medium,
+      alignItems: 'center',
     },
     signupText: {
       fontSize: theme.sizes.medium,
@@ -31,5 +36,12 @@ export const styles = (theme: Theme) =>
     },
     inputContainer: {
       marginTop: theme.sizes.medium,
+    },
+    bottomText: {
+      marginTop: theme.sizes.extra_extra_large * 2,
+      marginBottom: theme.sizes.extra_extra_large * 4.5,
+    },
+    loginContainer: {
+      alignItems: 'center',
     },
   });
