@@ -75,3 +75,8 @@ export function getValueFromUrl(url: string | null) {
   // Return null if the URL doesn't match the pattern
   return null;
 }
+
+export function calculateReadingTime(wordCount: number, wordsPerMinute = 200) {
+  const minutes = Math.ceil(wordCount / wordsPerMinute);
+  return minutes;
+}

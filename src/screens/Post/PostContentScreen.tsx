@@ -27,6 +27,7 @@ import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Clipboard from '@react-native-clipboard/clipboard';
 import GithubLink from '../../components/post/GithubLink';
+import {formatDate} from '../../helpers/functions';
 
 function PostContentScreen({route}: any): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -158,11 +159,17 @@ function PostContentScreen({route}: any): JSX.Element {
             color={theme.colors.text_color}
           />
         </TouchableOpacity>
-        <CustomText
-          style={styles(theme).postTitle}
-          title={post.title}
-          type={'h1'}
-        />
+        <View style={styles(theme).titleWithTime}>
+          <CustomText
+            style={styles(theme).postTitle}
+            title={post.title}
+            type={'h1'}
+          />
+          <CustomText
+            title={' · ' + formatDate(new Date(post?.$createdAt))}
+            type={'p2'}
+          />
+        </View>
       </View>
       {loading && (
         <ActivityIndicator
@@ -244,7 +251,7 @@ const styles = (theme: Theme) =>
       marginBottom: theme.sizes.medium,
     },
     postTitle: {
-      marginVertical: theme.sizes.large,
+      marginBottom: theme.sizes.extra_extra_small,
     },
     buttonStyle: {
       alignSelf: 'center',
@@ -255,6 +262,9 @@ const styles = (theme: Theme) =>
     titleContainer: {
       marginTop: theme.sizes.small,
       alignItems: 'flex-start',
+    },
+    titleWithTime: {
+      marginVertical: theme.sizes.large,
     },
   });
 
