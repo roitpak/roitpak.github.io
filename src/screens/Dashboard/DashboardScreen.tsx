@@ -37,6 +37,9 @@ import {
   getValueFromUrl,
 } from '../../helpers/functions';
 import SplashScreen from 'react-native-splash-screen';
+import loginDataService from '../../appwrite/login';
+// import Markdown from 'react-native-markdown-display';
+//TODO
 
 function DashboardScreen(): JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -71,13 +74,15 @@ function DashboardScreen(): JSX.Element {
     const unique = await getUserUniqueID();
     if (unique) {
       const response = await getGeoLocation();
-      const prevRecord = await postService.getPrevLoginLocation(unique);
+      const prevRecord = await loginDataService.getPrevLoginLocation(unique);
       if (prevRecord?.documents?.length === 0) {
-        await postService.postLoginLocation({
+        await loginDataService.postLoginLocation({
           ...response?.data,
           unique_id: unique,
           device: Platform.OS,
         });
+      } else {
+        await loginDataService.increaseCount(prevRecord?.documents[0]);
       }
     }
   };
@@ -172,6 +177,7 @@ function DashboardScreen(): JSX.Element {
           />
         </View>
       </View>
+      {/* <Markdown>this is a test single line md</Markdown> */}
       <CustomText
         style={styles(theme).introMessageStyle}
         title={strings.dashboardScreenWelcomeSub}
