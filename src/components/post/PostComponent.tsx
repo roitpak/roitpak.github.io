@@ -53,9 +53,8 @@ function PostComponent({id}: NewPostComponentProps): JSX.Element {
     setLoading(true);
     await postService
       .updatePostContent(id, postData)
-      .then(response => {
+      .then(() => {
         getPostContent();
-        console.log('Update post Content--->', response);
       })
       .catch(error => console.log(error));
     setLoading(false);
