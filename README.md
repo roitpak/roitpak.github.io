@@ -44,6 +44,34 @@
         <li><a href="#generate-env-file">Generate env File</a></li>
       </ul>
     </li>
+    <li>
+      <a href="#production-build">Production Build</a>
+      <ul>
+        <li><a href="#android">Android</a>
+          <ul>
+            <li><a href="#create-keystore-file-from-android-studio">Create keystore file from Android Studio</a></li>
+            <li><a href="#update-following-values-in-gradle-properties">Update following values in gradle.properties</a></li>
+            <li><a href="#create-bundle-or-apk-file">Create bundle or apk file</a></li>
+            <li><a href="#upload-to-playstore">Upload to PlayStore</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#ios">iOS</a>
+          <ul>
+            <li><a href="#update-signing-and-capabilities">Update Signing and Capabilities</a></li>
+            <li><a href="#choose-any-ios-device">Choose any iOS device</a></li>
+            <li><a href="#archive">Archive</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#web">Web</a>
+          <ul>
+            <li><a href="#github-pages">Github Pages</a></li>
+            <li><a href="#services-like-netlify">Services like Netlify</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
     <li><a href="#contributing">Contributing</a></li>
   </ol>
 </details>
@@ -196,6 +224,76 @@ REACT_APP_POSTS_DATA_COLLECTION="Post data ID" //Item data of list of contents i
 REACT_APP_POSTS_BUCKET="Storage bucket id here"
 ```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Production build
+
+### Android
+You may need to update splash screen and app icon to customize according to your need. Its pretty easy and contents are available in the internet. 
+
+<p><a href="https://reactnative.dev/docs/signed-apk-android">Official Documentation</a></p>
+
+#### Create keystore file from Android studio
+
+In Android studio > Build > Generate Signed APK > Create new
+
+
+
+#### Update following values in gradle properties
+
+Inside gradle.properties
+
+```bash
+MYAPP_UPLOAD_STORE_FILE=<FileName>
+MYAPP_UPLOAD_KEY_ALIAS=<KeyAlias>
+MYAPP_UPLOAD_STORE_PASSWORD=<StorePwd>
+MYAPP_UPLOAD_KEY_PASSWORD=<KeyPwd>
+```
+#### Create bundle or apk file
+
+To create bundle: BundleRelease
+
+To create apk: AssembleRelease
+
+```bash
+cd android
+./gradlew assembleRelease
+./gradlew bundleRelease
+```
+
+#### Upload to PlayStore:
+
+Now you can upload the bundle file or apk file to PlayStore and start the publishing process.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### IOS
+You may need to customize splash screen and app icons according to your need. Its pretty easy and content is available in the internet.
+
+#### Update Signing and capabilities
+Inside Signing and capabilities in xcode update the team.
+
+#### Choose any ios device
+On run destinations choose any ios device.
+
+#### Archive
+Under Product > Archive and follow the steps to upload to AppStore.
+
+### Web
+For publishing to web, push the customized code to github.com. Assign a branch to be used as production branch.
+
+#### Github pages
+Enable Github pages in your project if you are using github. Run following command.
+
+```bash
+yarn deploy
+```
+
+#### Services like Netlify
+Connect your project to netlify. Add your environment variables. And add following command as build command.
+```bash
+npm run build-web
+```
+Setting up netlify or other services should be pretty easy and clear 
 
 <!-- CONTRIBUTING -->
 ## Contributing
