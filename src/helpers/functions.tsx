@@ -1,7 +1,10 @@
 import axios from 'axios';
 import {Platform} from 'react-native';
+import Config from 'react-native-config';
 import {getUniqueId} from 'react-native-device-info';
 import {v4 as uuidv4} from 'uuid';
+
+const myConfig = Platform.OS === 'web' ? process.env : Config;
 
 export function formatDate(date: Date) {
   const months = [
@@ -38,7 +41,9 @@ export function extractVideoId(url: string) {
 }
 
 export const getGeoLocation = () =>
-  axios.get('http://www.geoplugin.net/json.gp');
+  axios.get(
+    `https://ipinfo.io/json?token=${myConfig.REACT_APP_GEO_LOGIN_TOKEN}`,
+  );
 
 export const getUserUniqueID = async (): Promise<string> => {
   if (Platform.OS === 'web') {
