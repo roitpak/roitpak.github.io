@@ -15,15 +15,15 @@ export class LoginDataService {
   }
 
   async postLoginLocation(data: any) {
+    const [latitude, longitude] = data.loc.split(',');
+
     const postData = {
-      geoplugin_request: data?.geoplugin_request,
-      city: data?.geoplugin_city,
-      region: data?.geoplugin_region,
-      country: data?.geoplugin_countryName,
-      country_code: data?.geoplugin_countryCode,
-      time_zone: data?.geoplugin_timezone,
-      lat: data?.geoplugin_latitude,
-      lng: data?.geoplugin_longitude,
+      geoplugin_request: data?.ip,
+      city: data?.city,
+      region: data?.region,
+      country_code: data?.country,
+      lat: latitude,
+      lng: longitude,
       unique_id: data?.unique_id,
       device: data?.device,
       last_access: new Date(),
