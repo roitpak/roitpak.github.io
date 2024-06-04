@@ -8,6 +8,7 @@ import {
   homeScreen,
   loginScreen,
   privacyScreen,
+  verificationEmailScreen,
 } from '../constants/Screens';
 import HomeScreen from '../screens/Home/HomeScreen';
 import LoginScreen from '../screens/Login/LoginScreen';
@@ -17,6 +18,7 @@ import {headerHidden} from './navigationsoptions';
 import PrivacyScreen from '../screens/Privacy/PrivacyScreen';
 import ContactScreen from '../screens/Contact/ContactScreen';
 import strings from '../constants/strings.json';
+import EmailVerificationScreen from '../screens/EmailVerification/EmailVerificationScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +51,10 @@ function MainStackScreen(): JSX.Element {
         <Stack.Screen name={addPostScreen} component={PostInfoScreen} />
         <Stack.Screen name={privacyScreen} component={PrivacyScreen} />
         <Stack.Screen name={contactScreen} component={ContactScreen} />
+        <Stack.Screen
+          name={verificationEmailScreen}
+          component={EmailVerificationScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -78,8 +78,8 @@ function LoginScreen(): JSX.Element {
         password: password,
         name: name,
       })
-      .then(userData => {
-        console.log('Appwrite sign up:', userData);
+      .then(() => {
+        openModal({title: strings.verifyEmail, subTitle: strings.checkEmail});
         setLogin();
         navigation.navigate(dashboardScreen);
       })
