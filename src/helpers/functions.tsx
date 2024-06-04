@@ -65,19 +65,18 @@ export function getValueFromUrl(url: string | null) {
   if (!url) {
     return null;
   }
+  if (url.indexOf('verify') !== -1) {
+    return 'verify';
+  }
   // Regular expression to match URLs with "/<value>" format
   const regex = /\/([a-zA-Z0-9]+)$/;
 
-  // Executing the regular expression on the URL
   const match = regex.exec(url);
 
-  // Check if the URL matches the pattern
   if (match) {
-    // Extracting the captured ID
     return match[1];
   }
 
-  // Return null if the URL doesn't match the pattern
   return null;
 }
 
