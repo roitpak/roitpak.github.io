@@ -26,5 +26,10 @@
     "share": "Share",
     "categorySubtitle": "Type category in the text input below and press Add category button.",
     "withAccount": "With a registered account you will be able to interact with the posts and save them for later. With it you can personalize your posts. \n Also you can subscribe to our newsletter.",
-    "passwordValidation": "At least 1 uppercase, 1 lower case, 1 numeric and minimum 8 characters."
+    "passwordValidation": "At least 1 uppercase, 1 lower case, 1 numeric and minimum 8 characters.",
+    "verifyEmail": "Verify Email",
+    "checkEmail": "Please check your email for the verification.",
+    "verificationInProcess": "Email verification in process",
+    "emailVerifiedSuccessfully": "Email verified successfully, You can login in now",
+    "errorOccurred": "An error occurred"
 }
