@@ -13,6 +13,7 @@ import {
   addPostScreen,
   loginScreen,
   privacyScreen,
+  verificationEmailScreen,
 } from '../../constants/Screens';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ADMIN_LABEL} from '../../constants/Constants';
@@ -97,8 +98,13 @@ function DashboardScreen(): JSX.Element {
   React.useEffect(() => {
     Linking.getInitialURL().then(async (url: string | null) => {
       const id = getValueFromUrl(url);
+      if (id === 'verify') {
+        navigation.navigate(verificationEmailScreen, {url: url});
+        return;
+      }
       if (id === 'PrivacyScreen') {
         navigation.navigate(privacyScreen);
+        return;
       }
       if (id) {
         await postService

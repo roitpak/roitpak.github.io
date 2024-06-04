@@ -23,7 +23,8 @@ export class AuthService {
         name,
       );
       if (userAccount) {
-        return this.login({email, password});
+        await this.login({email, password});
+        return this.createVerification();
       } else {
         return userAccount;
       }
@@ -59,7 +60,18 @@ export class AuthService {
   }
   async createVerification() {
     try {
-      return await this.account.createVerification('rohitpakhrin.com.np');
+      return await this.account.createVerification(
+        'https://rohitpakhrin.com.np/verify',
+      );
+    } catch (error: unknown) {
+      console.log('Appwrite service :: createVerification() :: ', error);
+      throw error;
+    }
+  }
+
+  async verifyUser(userId: string, secret: string) {
+    try {
+      return await this.account.updateVerification(userId, secret);
     } catch (error: unknown) {
       console.log('Appwrite service :: createVerification() :: ', error);
       throw error;
