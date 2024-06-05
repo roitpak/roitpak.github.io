@@ -57,7 +57,7 @@ export class LoginDataService {
     }
   }
   async increaseCount(prevData: any) {
-    const newCount = prevData.count + 1;
+    const newCount = prevData.count ? prevData.count + 1 : 1;
     const postData = {
       device: 'ios',
       count: newCount,
