@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Image, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import postService from '../../appwrite/posts';
 import CustomText from '../common/CustomText';
 import {Theme} from '../../constants/Types';
@@ -8,6 +8,7 @@ import {Dimensions} from '../../helpers/Dimensions';
 import Icon from '../../assets/Icon';
 import NewPostComponent from './NewPostComponent';
 import {useUser} from '../../context/user/useUser';
+import ImageView from '../common/ImageView';
 interface NewPostComponentProps {
   id: string;
 }
@@ -98,14 +99,13 @@ function PostComponent({id}: NewPostComponentProps): JSX.Element {
         </View>
       )}
       {image && (
-        <View style={styles(theme).contentContainerImage}>
-          <Image
-            style={styles(theme).image}
-            source={{
-              uri: image,
-            }}
-          />
-        </View>
+        <ImageView
+          contentContainerImage={styles(theme).contentContainerImage}
+          style={styles(theme).image}
+          source={{
+            uri: image,
+          }}
+        />
       )}
       <View style={styles(theme).contentContainer}>
         <CustomText title={postData?.content} type={'p1'} />
@@ -124,18 +124,6 @@ const styles = (theme: Theme) =>
     image: {
       height: 300,
       width: Dimensions.windowWidth * 0.8,
-      resizeMode: 'contain',
-      alignSelf: 'center',
-      backgroundColor: theme.colors.background_color,
-      borderRadius: theme.sizes.border_radius,
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
     },
     contentContainerTitle: {
       flexDirection: 'row',
@@ -143,6 +131,8 @@ const styles = (theme: Theme) =>
     },
     contentContainerImage: {
       marginTop: theme.sizes.extra_small,
+      height: 300,
+      width: Dimensions.windowWidth * 0.8,
     },
     contentContainer: {
       marginTop: theme.sizes.extra_small,
