@@ -41,7 +41,6 @@ function PostContentScreen({route}: any): JSX.Element {
   const {theme} = useTheme();
 
   useEffect(() => {
-    console.log(post.githubUrl);
     setPost(route.params);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route]);
@@ -200,6 +199,7 @@ function PostContentScreen({route}: any): JSX.Element {
       )}
       <View style={styles(theme).headerContainer}>
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={post.contents}
           renderItem={({item}) => <PostComponent id={item} />}
           keyExtractor={(item, index) => index.toString()}

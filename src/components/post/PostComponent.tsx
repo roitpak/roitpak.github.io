@@ -131,8 +131,6 @@ const styles = (theme: Theme) =>
     },
     contentContainerImage: {
       marginTop: theme.sizes.extra_small,
-      height: 300,
-      width: Dimensions.windowWidth * 0.8,
     },
     contentContainer: {
       marginTop: theme.sizes.extra_small,

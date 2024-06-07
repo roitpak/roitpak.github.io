@@ -12,6 +12,7 @@ import {
 import {Theme} from '../../constants/Types';
 import {useTheme} from '../../context/theme/useTheme';
 import {Dimensions} from '../../helpers/Dimensions';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 interface BaseCustomTextProps extends PropsWithChildren {
   style?: ImageStyle;
@@ -41,11 +42,19 @@ function ImageView({
       <Image style={[styles(theme).image, style]} source={source} />
       {source?.uri && (
         <Modal visible={imagePreview}>
-          <Pressable
-            style={styles(theme).imagePreviewContainer}
-            onPress={() => setImagePreview(false)}>
-            <Image style={[styles(theme).imagePreview]} source={source} />
-          </Pressable>
+          <ImageViewer
+            // eslint-disable-next-line react/no-unstable-nested-components
+            loadingRender={() => (
+              <ActivityIndicator
+                size={'large'}
+                color={theme.colors.text_color}
+                style={styles(theme).indicator}
+              />
+            )}
+            renderIndicator={() => <></>}
+            onClick={() => setImagePreview(false)}
+            imageUrls={[{url: source?.uri}]}
+          />
         </Modal>
       )}
     </Pressable>
