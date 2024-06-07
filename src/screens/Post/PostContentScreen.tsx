@@ -42,7 +42,6 @@ function PostContentScreen({route}: any): JSX.Element {
 
   useEffect(() => {
     setPost(route.params);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route]);
 
   const onChange = (value: PostContent) => {
