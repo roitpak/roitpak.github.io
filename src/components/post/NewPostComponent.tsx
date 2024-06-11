@@ -111,7 +111,11 @@ function NewPostComponent({
       />
       <View style={styles(theme).saveButton}>
         <Button
-          disabled={newPost?.title?.length === 0}
+          disabled={
+            newPost?.title?.length === 0 &&
+            newPost?.subtitle?.length === 0 &&
+            newPost?.content?.length === 0
+          }
           loading={loading}
           title={strings.savePost}
           onPress={onSave}
