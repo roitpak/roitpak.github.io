@@ -34,7 +34,7 @@ function ImageView({
       style={[styles(theme).imageContainer, contentContainerImage]}>
       <View style={[styles(theme).indicatorContainer, style]}>
         <ActivityIndicator
-          size={'large'}
+          size={'small'}
           color={theme.colors.text_color}
           style={styles(theme).indicator}
         />
@@ -90,8 +90,8 @@ const styles = (theme: Theme) =>
     },
     indicatorContainer: {
       position: 'absolute',
-      top: theme.sizes.extra_small,
-      left: theme.sizes.extra_small,
+      top: 0,
+      left: theme.sizes.small,
       alignItems: 'center',
       justifyContent: 'center',
     },
