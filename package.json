@@ -12,7 +12,7 @@
     "windows": "react-native run-windows",
     "macos": "react-native run-macos",
     "web": "react-scripts start",
-    "build-web": "react-scripts build",
+    "build-web": "GENERATE_SOURCEMAP=false react-scripts build",
     "predeploy": "npm run build-web",
     "deploy": "gh-pages -d build"
   },
