@@ -31,7 +31,7 @@ function ImageView({
     <Pressable
       onPress={() => setImagePreview(true)}
       style={[styles(theme).imageContainer, contentContainerImage]}>
-      <View style={[styles(theme).indicatorContainer, style]}>
+      <View style={[styles(theme).indicatorContainer]}>
         <ActivityIndicator
           size={'large'}
           color={theme.colors.text_color}
@@ -81,10 +81,12 @@ const styles = (theme: Theme) =>
     },
     indicatorContainer: {
       position: 'absolute',
-      top: theme.sizes.extra_small,
-      left: theme.sizes.extra_small,
+      top: 0,
+      left: theme.sizes.small,
       alignItems: 'center',
       justifyContent: 'center',
+      height: '100%',
+      width: '100%',
     },
     imagePreviewContainer: {
       height: Dimensions.windowHeight,
