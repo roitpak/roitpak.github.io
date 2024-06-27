@@ -5,12 +5,12 @@ import {
   addPostScreen,
   contactScreen,
   dashboardScreen,
-  homeScreen,
+  selfInfoScreen,
   loginScreen,
   privacyScreen,
   verificationEmailScreen,
 } from '../constants/Screens';
-import HomeScreen from '../screens/Home/HomeScreen';
+import SelfInfoScreen from '../screens/Self/SelfInfoScreen';
 import LoginScreen from '../screens/Login/LoginScreen';
 import DashboardScreen from '../screens/Dashboard/DashboardScreen';
 import PostInfoScreen from '../screens/Post/PostContentScreen';
@@ -28,7 +28,7 @@ function MainStackScreen(): JSX.Element {
     config: {
       screens: {
         dashboardScreen: '',
-        homeScreen: 'myself',
+        selfInfoScreen: 'myself',
         loginScreen: loginScreen,
         // adminDashboardScreen: '?:id/Search',
         NotFound: '*',
@@ -46,7 +46,7 @@ function MainStackScreen(): JSX.Element {
         screenOptions={headerHidden}
         initialRouteName={dashboardScreen}>
         <Stack.Screen name={dashboardScreen} component={DashboardScreen} />
-        <Stack.Screen name={homeScreen} component={HomeScreen} />
+        <Stack.Screen name={selfInfoScreen} component={SelfInfoScreen} />
         <Stack.Screen name={loginScreen} component={LoginScreen} />
         <Stack.Screen name={addPostScreen} component={PostInfoScreen} />
         <Stack.Screen name={privacyScreen} component={PrivacyScreen} />
